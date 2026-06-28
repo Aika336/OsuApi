@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="Hahui/Hahui.vcxproj" Id="ca9120e8-cc59-4f22-b4b8-6b7561631a3e" />
+</Solution>

@@ -20,14 +20,21 @@ int main() {
     OsuReader osu_reader;
     
     GameState state = osu_reader.GetLastGameState();
-    if (state.is_playing) {
-        std::cout << state.mods << std::endl; // return current enable mods
-		std::cout << state.combo << std::endl; // return current combo
-	}
-    else {
-		std::cout << "Not playing" << std::endl;
+    while (1) {
+		osu_reader.ReadGameState();
+		state = osu_reader.GetLastGameState();
+        if (state.is_playing) {
+            std::cout << state.mods << std::endl; // return current enable mods
+            std::cout << state.combo << std::endl; // return current combo
+        }
+        else {
+            std::cout << "Not playing" << std::endl;
+        }
+        Sleep(200);
+        system("cls");
     }
 }
+
 ```
 
 This example checks whether the map is playing, and based on this, displays the current combo and a list of mods, or displays information if the player is not playing.

@@ -38,3 +38,26 @@ int main() {
 ```
 
 This example checks whether the map is playing, and based on this, displays the current combo and a list of mods, or displays information if the player is not playing.
+
+---
+
+## Features of work:
+The search for the base address from which the entire search will proceed is performed by searching for a signature:
+```cpp
+inline const std::vector<uint8_t> signature_ = {
+    0x67, 0x00, 0x20, 0x00, 0x6F, 0x00, 0x6E, 0x00,
+    0x20, 0x00, 0x34, 0x00, 0x35, 0x00, 0x33, 0x00,
+    0x35, 0x00, 0x37, 0x00, 0x29, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x02, 0x02, 0x02, 0x02,
+    0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02
+};
+```
+To find the address, use the **OsuReader::FindGameBaseAddress()** function, which internally searches the process's address pages and searches for a signature using the **OsuReader::CheckForStableSignature()** helper function.
+**OsuReader::CheckForStableSignature()** - This method accepts a list of bytes located on a memory page and then compares and searches for the required byte within it using signature_
+
+---
+
+## Plans for the future:
+ - [ ] Adding more information that can be read and applied.
+ - [ ] Migrate this project to CMake.
+ - [ ] Adding a script that will automatically search for offsets.

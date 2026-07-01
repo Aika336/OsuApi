@@ -59,5 +59,5 @@ To find the address, use the **OsuReader::FindGameBaseAddress()** function, whic
 
 ## Plans for the future:
  - [ ] Adding more information that can be read and applied.
- - [ ] Migrate this project to CMake.
+ - [x] Migrate this project to CMake.
  - [ ] Adding a script that will automatically search for offsets.

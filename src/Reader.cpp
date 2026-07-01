@@ -4,26 +4,23 @@
 #pragma once
 #include <algorithm>
 #include <stdexcept>
-#include "Memory.hpp"
-#include "../include/Reader.h"
-#include "../include/Offsets.h"
-#include "../include/ProcessUtils.h"
+#include "Memory.cpp"
+#include "Reader.h"
+#include "Offsets.h"
+#include "ProcessUtils.cpp"
+
+#include <iostream>
 
 constexpr size_t value_offset_ = 32;
 static uint8_t NONCONST_BYTE_ = 0x02;
 static int STABLE_AVAILABLE_MISSES_ = 0;
 
-inline OsuReader::OsuReader() {
+OsuReader::OsuReader() {
     process_handle_ = ProcessUtils::OpenProcessByName(L"osu!.exe");
-    if (process_handle_ == INVALID_HANDLE_VALUE) {
-        throw std::runtime_error("OsuReader(): can't find process with name \"osu!.exe\"");
-    }
-    if (!FindGameBaseAddress()) {
-        throw std::runtime_error("OsuReader(): can't find base game address!");
-    }
+    FindGameBaseAddress();
 }
 
-inline OsuReader::~OsuReader() = default;
+OsuReader::~OsuReader() = default;
 
 inline int OsuReader::CheckForStableSignature(const std::vector<uint8_t>& bytes_region)
 {
@@ -75,12 +72,12 @@ inline int OsuReader::CheckForStableSignature(const std::vector<uint8_t>& bytes_
     return -1;
 }
 
-inline const GameState& OsuReader::GetLastGameState() {
+inline GameState& OsuReader::GetLastGameState() {
     return game_state_;
 }
 
 inline int32_t OsuReader::ReadGameMode() {
-    uintptr_t ruleset_bindable = Memory::RPM<uintptr_t>(process_handle_,game_address_ + OsuOffsets::OsuGameDesktop_Ruleset);
+    uintptr_t ruleset_bindable = Memory::RPM<uintptr_t>(process_handle_, game_address_ + OsuOffsets::OsuGameDesktop_Ruleset);
     uintptr_t ruleset_info = Memory::RPM<uintptr_t>(process_handle_, ruleset_bindable + 0x20);
     return Memory::RPM<int32_t>(process_handle_, ruleset_info + OsuOffsets::RulesetInfo_OnlineID);
 }
@@ -119,7 +116,7 @@ inline std::vector<std::string> OsuReader::ReadEnabledMods(uintptr_t score_info)
 
 inline int32_t OsuReader::ReadCombo(uintptr_t current_screen) {
     uintptr_t score = Memory::RPM<uintptr_t>(process_handle_,
-    current_screen + OsuOffsets::Player_ScoreProcessor);
+        current_screen + OsuOffsets::Player_ScoreProcessor);
 
     if (score == 0) return -1;
 
@@ -137,9 +134,9 @@ inline uintptr_t OsuReader::FindCurrentScreen() {
     uintptr_t stack = Memory::RPM<uintptr_t>(process_handle_,
         screen_stack + OsuOffsets::ScreenStack_stack);
 
-    uint32_t count = Memory::RPM<uint32_t>(process_handle_,stack + 0x10);
+    uint32_t count = Memory::RPM<uint32_t>(process_handle_, stack + 0x10);
 
-    uintptr_t items = Memory::RPM<uintptr_t>(process_handle_,stack + 0x8);
+    uintptr_t items = Memory::RPM<uintptr_t>(process_handle_, stack + 0x8);
 
     if (count <= 0 || items == 0)
         return 0;
@@ -181,6 +178,10 @@ inline bool OsuReader::FindGameBaseAddress() {
                 if (offset >= 0) {
                     game_address_ = static_cast<uintptr_t>((SIZE_T)mbi.BaseAddress + offset);
 
+                    std::cout << std::hex << game_address_;
+                    int a;
+                    std::cin >> a;
+
                     return true;
                 }
             }
@@ -194,53 +195,54 @@ inline bool OsuReader::FindGameBaseAddress() {
 inline ReadResult OsuReader::ReadGameState() {
     ReadResult result;
 
-    game_state_.game_mode_ = ReadGameMode();
+    game_state_.game_mode = ReadGameMode();
 
     // Поиск текущего экрана
     uintptr_t current_screen = FindCurrentScreen();
     if (!current_screen) {
-        result.success_ = false;
-        result.error_ = "Failed to find current screen";
-        result.game_state_ = game_state_;
+        result.success = false;
+        result.error = "Failed to find current screen";
+        result.game_state = game_state_;
         return result;
     }
 
-    game_state_.screen_address_ = current_screen;
+    game_state_.screen_address = current_screen;
 
     // Проверка, что это экран Player
     if (!ValidatePlayerScreen(current_screen)) {
-        game_state_.is_playing_ = false;
-        result.success_ = true;
-        result.game_state_ = game_state_;
+        game_state_.is_playing = false;
+        result.success = true;
+        result.game_state = game_state_;
         return result;
     }
 
-    game_state_.is_playing_ = true;
+    game_state_.is_playing = true;
 
-    // Чтение информации оScore
+    // Чтение информации Score
     uintptr_t player_score = Memory::RPM<uintptr_t>(process_handle_, current_screen + OsuOffsets::Player_Score);
     uintptr_t score_info = Memory::RPM<uintptr_t>(process_handle_, player_score + 0x8);
 
     // Чтение модификаторов
     std::vector<std::string> enabled_mods = ReadEnabledMods(score_info);
-    game_state_.enable_mods_ = enabled_mods;
+    game_state_.enable_mods = enabled_mods;
 
     // Объединение модов в строку
     if (enabled_mods.empty()) {
-        game_state_.mods_ = "NM";
-    } else {
+        game_state_.mods = "NM";
+    }
+    else {
         std::string mods_str;
         for (const auto& mod : enabled_mods) {
             mods_str += mod;
         }
-        game_state_.mods_ = mods_str;
+        game_state_.mods = mods_str;
     }
 
     // Чтение комбо
     int32_t combo = ReadCombo(current_screen);
-    game_state_.combo_ = combo;
+    game_state_.combo = combo;
 
-    result.success_ = true;
-    result.game_state_ = game_state_;
+    result.success = true;
+    result.game_state = game_state_;
     return result;
 }

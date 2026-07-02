@@ -3,7 +3,7 @@
 #include "ProcessMemoryScanner.h"
 #include <Windows.h>
 
-uintptr_t ProcessMemoryScanner::ScanProcessMemoryForSignature(Handler_raii&& handler, PatternMatcher mather)
+uintptr_t ProcessMemoryScanner::ScanProcessMemoryForSignature(const Handler_raii& handler, PatternMatcher mather)
 {
 	SIZE_T addr_scan = 0;
 	MEMORY_BASIC_INFORMATION mbi;

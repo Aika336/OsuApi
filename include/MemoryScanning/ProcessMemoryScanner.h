@@ -4,5 +4,5 @@
 
 class ProcessMemoryScanner {
 public:
-	static uintptr_t ScanProcessMemoryForSignature(Handler_raii&& handler, PatternMatcher mather);
+	static uintptr_t ScanProcessMemoryForSignature(const Handler_raii& handler, PatternMatcher mather);
 };

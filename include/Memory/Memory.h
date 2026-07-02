@@ -9,13 +9,13 @@
 class Memory {
 public:
 	template<typename T>
-	static T RPM(Handler_raii handler, uintptr_t address);
+	static T RPM(const Handler_raii& handler, uintptr_t address);
 
-	static std::vector<uint8_t> ReadMemoryRegion(Handler_raii handler, uintptr_t address, size_t size);
+	static std::vector<uint8_t> ReadMemoryRegion(const Handler_raii& handler, uintptr_t address, size_t size);
 };
 
 template<typename T>
-inline T Memory::RPM(Handler_raii handler, uintptr_t address)
+inline T Memory::RPM(const Handler_raii& handler, uintptr_t address)
 {
 	T value{};
 	SIZE_T read_bytes = 0;

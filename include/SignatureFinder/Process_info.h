@@ -4,6 +4,6 @@
 #include <string>
 
 struct ProcessInfo {
-	DWORD processId;
-	std::wstring name;
+	DWORD processId = 0;
+	std::wstring name = L"";
 };

@@ -34,5 +34,5 @@ add_executable(OsuApi
 )
 
 target_link_libraries(OsuApi PRIVATE MemoryScanning)
-target_link_libraries(MemoryScanning PRIVATE ProcessManager)
-target_link_libraries(MemoryScanning PRIVATE Memory)
+target_link_libraries(MemoryScanning PUBLIC ProcessManager)
+target_link_libraries(MemoryScanning PUBLIC Memory)

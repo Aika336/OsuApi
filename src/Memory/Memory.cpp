@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Memory.h"
+#include <Windows.h>
+#include <vector>
 
 std::vector<uint8_t> Memory::ReadMemoryRegion(Handler_raii handler, uintptr_t address, size_t size) {
 	std::vector<uint8_t> buffer(size);

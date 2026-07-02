@@ -10,7 +10,7 @@ ProcessInfo ProvideProcesses::FindProcessByName(const std::wstring& name)
 	std::vector<ProcessInfo> processes = GetAllProcesses();
 	if (processes.size() == 0) {
 		std::cout << "ProvideProcesses::FindProcessByName: No processes found." << std::endl;
-		return ProcessInfo(-1,L"");
+		return ProcessInfo(0,L"");
 	}
 
 	for (const auto& process : processes) {
@@ -45,8 +45,8 @@ std::vector<ProcessInfo> ProvideProcesses::GetAllProcesses() {
 ProcessInfo ProvideProcesses::GetProcessByName(const std::wstring& name)
 {
 	ProcessInfo process = FindProcessByName(name);
-	if (process.processId == -1) {
-		return ProcessInfo(-1, L"");
+	if (process.processId == 0) {
+		return ProcessInfo(0, L"");
 	}
 
 	return process;

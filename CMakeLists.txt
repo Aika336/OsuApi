@@ -8,6 +8,7 @@ add_library(SignatureFinder
     include/SignatureFinder/Process_info.h
     include/SignatureFinder/ProvideProcesses.h
     include/SignatureFinder/SignatureFinder.h
+    include/SignatureFinder/HandlerRaii.h
     src/SignatureFinder/ProvideProcesses.cpp
     src/SignatureFinder/OpenProcess.cpp
     src/SignatureFinder/SignatureFinder.cpp

@@ -17,7 +17,7 @@ int PatternMatcher::CheckForStableSignature(const std::vector<uint8_t>& region_b
 			}
 		}
 
-		return static_cast<int>(offset);
+		if (match) return static_cast<int>(offset);
 	}
 
     return -1;

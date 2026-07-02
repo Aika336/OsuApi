@@ -16,7 +16,6 @@ add_library(SignatureFinder
 
 add_library(Memory
     include/Memory/Memory.h
-    src/Memory/Memory.cpp
 )
 
 target_include_directories(SignatureFinder PUBLIC include/SignatureFinder)

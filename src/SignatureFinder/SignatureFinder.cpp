@@ -76,3 +76,30 @@ uintptr_t SignatureFinder::FindAddressBySignature()
     }
     return 0;
 }
+
+uintptr_t SignatureFinder::FindAddressBySignature(MEMORY_BASIC_INFORMATION filter)
+{
+    SIZE_T scan_addr = 0;
+    MEMORY_BASIC_INFORMATION mbi;
+
+    while (VirtualQueryEx(handler.hProcess, reinterpret_cast<LPVOID>(scan_addr), &mbi, sizeof(mbi))) {
+        SIZE_T region_end = reinterpret_cast<SIZE_T>(mbi.BaseAddress) + mbi.RegionSize;
+
+        if (mbi.State == filter.State &&
+			mbi.Protect == filter.Protect &&
+            mbi.Type == filter.Type) {
+
+            std::vector<uint8_t> regionBytes(mbi.RegionSize);
+            SIZE_T bytes_read = 0;
+            if (ReadProcessMemory(handler.hProcess, mbi.BaseAddress, regionBytes.data(), mbi.RegionSize, &bytes_read) > 0) {
+                int offset = CheckForStableSignature(regionBytes);
+                if (offset >= 0) {
+                    return static_cast<uintptr_t>((SIZE_T)mbi.BaseAddress + offset);
+                }
+            }
+        }
+
+        scan_addr = region_end;
+    }
+    return 0;
+}

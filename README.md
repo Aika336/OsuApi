@@ -14,3 +14,5 @@ To find the signature, we use auxiliary tools provided by the SignatureFinder mo
     - The main function of this module. For proper operation, all necessary parameters, such as **handle_number of process**, **signature**, **non-const byte**, and **offset**, are passed through the constructor when creating a class instance. ```SignatureFinder(Handler_raii handler, const std::vector<uint8_t>& signature_, uint8_t NONCONST_BYTE_, size_t value_offset_)```. Inside the class there is a function **CheckForStableSignature** that checks the memory segment for the presence of the passed signature; if such memory is found, it returns the offset to the desired section where the signature itself is located.
 
 ![Graph](repoFiles/SignatureFinder.svg)
+
+## !! will be change !! 

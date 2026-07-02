@@ -5,5 +5,5 @@
 
 struct ProcessInfo {
 	DWORD processId;
-	std::string name;
+	std::wstring name;
 };

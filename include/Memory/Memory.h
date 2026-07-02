@@ -5,17 +5,18 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <optional>
 
 class Memory {
 public:
 	template<typename T>
-	static T RPM(const Handler_raii& handler, uintptr_t address);
+	static std::optional<T> RPM(const Handler_raii& handler, uintptr_t address);
 
-	static std::vector<uint8_t> ReadMemoryRegion(const Handler_raii& handler, uintptr_t address, size_t size);
+	static std::optional<std::vector<uint8_t>> ReadMemoryRegion(const Handler_raii& handler, uintptr_t address, size_t size);
 };
 
 template<typename T>
-inline T Memory::RPM(const Handler_raii& handler, uintptr_t address)
+inline std::optional<T> Memory::RPM(const Handler_raii& handler, uintptr_t address)
 {
 	T value{};
 	SIZE_T read_bytes = 0;
@@ -23,7 +24,7 @@ inline T Memory::RPM(const Handler_raii& handler, uintptr_t address)
 	if (!ReadProcessMemory(handler.hProcess, static_cast<LPVOID>(address), &value, sizeof(T), &read_bytes) 
 		|| read_bytes != sizeof(T)) {
 		std::cout << "Failed to read memory at address: " << std::hex << address << std::dec << std::endl;
-		return T{};
+		return std::nullopt;
 	}
 
 	return value;

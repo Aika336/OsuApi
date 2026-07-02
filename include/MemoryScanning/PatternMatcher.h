@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <optional>
 
 class PatternMatcher {
 	std::vector<uint8_t> signature;
@@ -15,6 +16,6 @@ public:
 			std::cerr << "Error: Signature and mask must be of the same size." << std::endl;
 		}
 	}
-	int CheckForStableSignature(const std::vector<uint8_t>& region_bytes) const;
+	std::optional<size_t> CheckForStableSignature(const std::vector<uint8_t>& region_bytes) const;
 	int getOffset() const { return offset; }
 };

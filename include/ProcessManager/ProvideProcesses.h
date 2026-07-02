@@ -2,10 +2,11 @@
 
 #include <vector>
 #include "Process_info.h"
+#include <optional>
 
 class ProvideProcesses {
-	static ProcessInfo FindProcessByName(const std::wstring& name);
+	static std::optional<ProcessInfo> FindProcessByName(const std::wstring& name);
 public:
 	static std::vector<ProcessInfo> GetAllProcesses();
-	static ProcessInfo GetProcessByName(const std::wstring& name);
+	static std::optional<ProcessInfo> GetProcessByName(const std::wstring& name);
 };

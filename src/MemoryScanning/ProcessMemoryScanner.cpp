@@ -3,7 +3,7 @@
 #include "ProcessMemoryScanner.h"
 #include <Windows.h>
 
-uintptr_t ProcessMemoryScanner::ScanProcessMemoryForSignature(const Handler_raii& handler, PatternMatcher mather)
+std::optional<uintptr_t> ProcessMemoryScanner::ScanProcessMemoryForSignature(const Handler_raii& handler, PatternMatcher mather)
 {
 	SIZE_T addr_scan = 0;
 	MEMORY_BASIC_INFORMATION mbi;
@@ -17,9 +17,8 @@ uintptr_t ProcessMemoryScanner::ScanProcessMemoryForSignature(const Handler_raii
             std::vector<uint8_t> regionBytes(mbi.RegionSize);
             SIZE_T bytes_read = 0;
             if (ReadProcessMemory(handler.hProcess, mbi.BaseAddress, regionBytes.data(), mbi.RegionSize, &bytes_read) > 0) {
-                int offset = mather.CheckForStableSignature(regionBytes);
-                if (offset >= 0) {
-                    return static_cast<uintptr_t>((SIZE_T)mbi.BaseAddress + offset + mather.getOffset());
+                if (auto offset = mather.CheckForStableSignature(regionBytes)) {
+                    return static_cast<uintptr_t>((SIZE_T)mbi.BaseAddress + offset.value() + mather.getOffset());
                 }
             }
         }
@@ -27,5 +26,5 @@ uintptr_t ProcessMemoryScanner::ScanProcessMemoryForSignature(const Handler_raii
 		addr_scan = region_end;
 	}
 
-    return 0;
+    return std::nullopt;
 }

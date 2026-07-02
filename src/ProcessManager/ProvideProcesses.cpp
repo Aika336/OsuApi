@@ -5,7 +5,7 @@
 #include <TlHelp32.h>
 #include <iostream>
 
-ProcessInfo ProvideProcesses::FindProcessByName(const std::wstring& name)
+std::optional<ProcessInfo> ProvideProcesses::FindProcessByName(const std::wstring& name)
 {
 	std::vector<ProcessInfo> processes = GetAllProcesses();
 	if (processes.size() == 0) {
@@ -19,7 +19,7 @@ ProcessInfo ProvideProcesses::FindProcessByName(const std::wstring& name)
 		}
 	}
 
-	return ProcessInfo();
+	return std::nullopt;
 }
 
 std::vector<ProcessInfo> ProvideProcesses::GetAllProcesses() {
@@ -42,12 +42,7 @@ std::vector<ProcessInfo> ProvideProcesses::GetAllProcesses() {
 	return processes;
 }
 
-ProcessInfo ProvideProcesses::GetProcessByName(const std::wstring& name)
+std::optional<ProcessInfo> ProvideProcesses::GetProcessByName(const std::wstring& name)
 {
-	ProcessInfo process = FindProcessByName(name);
-	if (process.processId == 0) {
-		return ProcessInfo(0, L"");
-	}
-
-	return process;
+	return FindProcessByName(name);
 }

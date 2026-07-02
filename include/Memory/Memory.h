@@ -10,8 +10,8 @@ public:
 	template<typename T>
 	static T RPM(Handler_raii handler, uintptr_t address);
 
-	static std::wstring ReadDotNetString(HANDLE hProcess, uintptr_t string_address);
-	static std::vector<uint8_t> ReadMemoryRegion(HANDLE hProcess, uintptr_t address, size_t size);
+	static std::wstring ReadDotNetString(Handler_raii handler, uintptr_t string_address);
+	static std::vector<uint8_t> ReadMemoryRegion(Handler_raii handler, uintptr_t address, size_t size);
 };
 
 template<typename T>
@@ -27,4 +27,14 @@ inline T Memory::RPM(Handler_raii handler, uintptr_t address)
 	}
 
 	return value;
+}
+
+inline std::vector<uint8_t> Memory::ReadMemoryRegion(Handler_raii handler, uintptr_t address, size_t size) {
+	std::vector<uint8_t> buffer(size);
+	SIZE_T read_bytes = 0;
+	if (!ReadProcessMemory(handler.hProcess, reinterpret_cast<LPVOID>(address), buffer.data(), size, &read_bytes)) {
+		buffer.clear();
+	}
+
+	return buffer;
 }

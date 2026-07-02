@@ -14,11 +14,17 @@ add_library(SignatureFinder
     src/SignatureFinder/SignatureFinder.cpp
 )
 
+add_library(Memory
+    include/Memory/Memory.h
+    src/Memory/Memory.cpp
+)
+
 target_include_directories(SignatureFinder PUBLIC include/SignatureFinder)
+target_include_directories(Memory PUBLIC include/Memory)
 
 add_executable(OsuApi
     main.cpp
 )
 
-
 target_link_libraries(OsuApi PRIVATE SignatureFinder)
+target_link_libraries(SignatureFinder PUBLIC Memory)

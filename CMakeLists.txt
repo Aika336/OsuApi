@@ -17,6 +17,7 @@ add_library(MemoryScanning
     include/MemoryScanning/PatternMatcher.h
     include/MemoryScanning/ProcessMemoryScanner.h
     src/MemoryScanning/ProcessMemoryScanner.cpp
+    src/MemoryScanning/PatternMatcher.cpp
 )
 
 add_library(Memory

@@ -1,10 +1,11 @@
 #pragma once
 
 #include <Windows.h>
+#include "HandlerRaii.h"
 
 class OpenProcess {
 public:
-	static HANDLE OpenProcessByIdW(DWORD processId);
-	static HANDLE OpenProcessByIdR(DWORD processId);
-	static HANDLE OpenProcessByIdRW(DWORD processId);
+	static Handler_raii OpenProcessByIdW(DWORD processId);
+	static Handler_raii OpenProcessByIdR(DWORD processId);
+	static Handler_raii OpenProcessByIdRW(DWORD processId);
 };

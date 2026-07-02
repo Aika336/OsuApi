@@ -11,7 +11,6 @@ public:
 	template<typename T>
 	static T RPM(Handler_raii handler, uintptr_t address);
 
-	static std::wstring ReadDotNetString(Handler_raii handler, uintptr_t string_address);
 	static std::vector<uint8_t> ReadMemoryRegion(Handler_raii handler, uintptr_t address, size_t size);
 };
 

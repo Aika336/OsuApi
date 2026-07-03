@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <string>
+#include <ProviderOsuInfo.h>
 
 struct GameState {
 	bool is_playing = false;
@@ -9,7 +10,10 @@ struct GameState {
 };
 
 class OsuHandler {
-
+	GameState game_state_;
+	ProvideOsuInfo* osu_info_;
 public:
-
+	OsuHandler();
+	const void UpdateGameState();
+	const GameState& GetGameState();
 };

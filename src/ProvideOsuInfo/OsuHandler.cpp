@@ -19,3 +19,8 @@ OsuHandler::OsuHandler()
 
 	osu_info_ = new ProvideOsuInfo(handler, game_base_address.value());
 }
+
+const GameState& OsuHandler::GetGameState()
+{
+	return game_state_;
+}

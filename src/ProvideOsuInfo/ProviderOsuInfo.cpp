@@ -2,6 +2,7 @@
 #include <OsuOffset.h>
 #include "../../include/Memory/Memory.h"
 #include <DotNetString.h>
+#include "algorithm"
 
 std::optional<uintptr_t> ProvideOsuInfo::GetCurrentScreenAddress()
 {
@@ -70,7 +71,7 @@ std::vector<std::string> ProvideOsuInfo::GetCurrentMods()
     return mods;
 }
 
-std::optional<uint32_t> ProvideOsuInfo::GetCurrentCombo()
+std::optional<int32_t> ProvideOsuInfo::GetCurrentCombo()
 {
     auto screen = GetCurrentScreenAddress();
     if (!screen) {
@@ -98,16 +99,16 @@ std::optional<bool> ProvideOsuInfo::GetPlayingState()
 		return std::nullopt;
     }
 
-    uintptr_t game_api = Memory::RPM<uintptr_t>(handler_,
-        base_address_ + OsuOffsets::OsuGameBase_API).value();
-    uintptr_t game_score_manager = Memory::RPM<uintptr_t>(handler_,
-        base_address_ + OsuOffsets::OsuGameBase_ScoreManager).value();
-    uintptr_t player_api = Memory::RPM<uintptr_t>(handler_,
-        screen.value() + OsuOffsets::Player_api).value();
-    uintptr_t player_score_manager = Memory::RPM<uintptr_t>(handler_,
-        screen.value() + OsuOffsets::Player_scoreManager).value();
+    auto game_api = Memory::RPM<uintptr_t>(handler_,
+        base_address_ + OsuOffsets::OsuGameBase_API);
+    auto game_score_manager = Memory::RPM<uintptr_t>(handler_,
+        base_address_ + OsuOffsets::OsuGameBase_ScoreManager);
+    auto player_api = Memory::RPM<uintptr_t>(handler_,
+        screen.value() + OsuOffsets::Player_api);
+    auto player_score_manager = Memory::RPM<uintptr_t>(handler_,
+        screen.value() + OsuOffsets::Player_scoreManager);
 
-    if (game_api == 0 || game_score_manager == 0 || player_api == 0 || player_score_manager == 0) {
+    if (!game_api || !game_score_manager || !player_api || !player_score_manager) {
         return std::nullopt;
     }
 

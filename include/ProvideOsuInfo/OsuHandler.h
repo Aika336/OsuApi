@@ -30,6 +30,7 @@ class OsuHandler {
 	ProvideOsuInfo* osu_info_;
 public:
 	OsuHandler();
-	const void UpdateGameState();
-	const GameState& GetGameState();
+	void UpdateGameState();
+	const GameState GetGameState();
+    ~OsuHandler() { delete osu_info_; }
 };

@@ -20,14 +20,14 @@ OsuHandler::OsuHandler()
 	osu_info_ = new ProvideOsuInfo(handler, game_base_address.value());
 }
 
-const void OsuHandler::UpdateGameState()
+void OsuHandler::UpdateGameState()
 {
 	game_state_.current_combo = osu_info_->GetCurrentCombo().value();
 	game_state_.current_mods = osu_info_->GetCurrentMods();
 	game_state_.is_playing = osu_info_->GetPlayingState().value();
 }
 
-const GameState& OsuHandler::GetGameState()
+const GameState OsuHandler::GetGameState()
 {
 	return game_state_;
 }

@@ -19,3 +19,17 @@ std::optional<uintptr_t> ProvideOsuInfo::GetCurrentScreenAddress()
 
     return Memory::RPM<uintptr_t>(handler_, items + 0x10 + 0x8 * (count - 1));
 }
+
+std::optional<uint32_t> ProvideOsuInfo::GetCurrentCombo()
+{
+    uintptr_t score = Memory::RPM<uintptr_t>(handler_,
+        current_screen + OsuOffsets::Player_ScoreProcessor).value();
+
+    if (score == 0) return std::nullopt;
+
+    uintptr_t combo = Memory::RPM<uintptr_t>(handler_,
+        score + OsuOffsets::OsuScoreProcessor_Combo).value();
+    if (combo == 0) return std::nullopt;
+
+    return Memory::RPM<int32_t>(handler_, combo + 0x40);
+}

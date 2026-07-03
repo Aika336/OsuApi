@@ -21,7 +21,7 @@ inline std::optional<T> Memory::RPM(const Handler_raii& handler, uintptr_t addre
 	T value{};
 	SIZE_T read_bytes = 0;
 
-	if (!ReadProcessMemory(handler.hProcess, static_cast<LPVOID>(address), &value, sizeof(T), &read_bytes) 
+	if (!ReadProcessMemory(handler.hProcess, reinterpret_cast<LPVOID>(address), &value, sizeof(T), &read_bytes) 
 		|| read_bytes != sizeof(T)) {
 		std::cout << "Failed to read memory at address: " << std::hex << address << std::dec << std::endl;
 		return std::nullopt;

@@ -33,3 +33,21 @@ std::optional<uint32_t> ProvideOsuInfo::GetCurrentCombo()
 
     return Memory::RPM<int32_t>(handler_, combo + 0x40);
 }
+
+std::optional<bool> ProvideOsuInfo::GetPlayingState()
+{
+    uintptr_t game_api = Memory::RPM<uintptr_t>(handler_,
+        base_address_ + OsuOffsets::OsuGameBase_API).value();
+    uintptr_t game_score_manager = Memory::RPM<uintptr_t>(handler_,
+        base_address_ + OsuOffsets::OsuGameBase_ScoreManager).value();
+    uintptr_t player_api = Memory::RPM<uintptr_t>(handler_,
+        current_screen + OsuOffsets::Player_api).value();
+    uintptr_t player_score_manager = Memory::RPM<uintptr_t>(handler_,
+        current_screen + OsuOffsets::Player_scoreManager).value();
+
+    if (game_api == 0 || game_score_manager == 0 || player_api == 0 || player_score_manager == 0) {
+        return std::nullopt;
+    }
+
+    return player_api == game_api && player_score_manager == game_score_manager;
+}

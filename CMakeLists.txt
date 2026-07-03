@@ -23,8 +23,10 @@ add_library(MemoryScanning
 
 add_library(Memory
     include/Memory/Memory.h
+    include/Memory/DotNetString.h
     # src
     src/Memory/Memory.cpp
+    src/Memory/DotNetString.cpp
 )
 
 add_library(ProvideOsuInfo

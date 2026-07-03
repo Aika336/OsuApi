@@ -50,6 +50,6 @@ add_executable(OsuApi
     main.cpp
 )
 
-target_link_libraries(OsuApi PRIVATE MemoryScanning)
+target_link_libraries(OsuApi PRIVATE ProvideOsuInfo)
 target_link_libraries(MemoryScanning PUBLIC ProcessManager)
 target_link_libraries(ProvideOsuInfo PUBLIC Memory ProcessManager MemoryScanning)

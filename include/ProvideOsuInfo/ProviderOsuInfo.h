@@ -2,6 +2,8 @@
 #include <Windows.h>
 #include <optional>
 #include "HandlerRaii.h"
+#include <vector>
+#include <string>
 
 class ProvideOsuInfo {
 	uintptr_t base_address_;
@@ -13,6 +15,6 @@ class ProvideOsuInfo {
 public:
 	ProvideOsuInfo(const Handler_raii& handler, const uintptr_t &base_address) : base_address_(base_address), handler_(handler){}
 	std::vector<std::string> GetCurrentMods();
-	std::optional<uint32_t> GetCurrentCombo();
+	std::optional<int32_t> GetCurrentCombo();
 	std::optional<bool> GetPlayingState();
 };

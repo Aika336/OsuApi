@@ -35,13 +35,12 @@ std::optional<uintptr_t> ProvideOsuInfo::GetScoreInfo()
 	return score_info == 0 ? std::nullopt : std::optional<uintptr_t>(score_info);
 }
 
-std::optional<std::vector<std::string>> ProvideOsuInfo::GetCurrentMods()
+std::vector<std::string> ProvideOsuInfo::GetCurrentMods()
 {
-    auto score_info = ProvideOsuInfo::GetScoreInfo();
-    if (score_info == std::nullopt)
-        return std::nullopt;
-
     std::vector<std::string> mods;
+    auto score_info = GetScoreInfo();
+    if (!score_info)
+        return mods;
 
     uintptr_t string_address = Memory::RPM<uintptr_t>(handler_, score_info.value() + OsuOffsets::ScoreInfo_ModsJson).value();
     std::wstring mods_json = DotNetString::Read(handler_, string_address).value_or(L"");

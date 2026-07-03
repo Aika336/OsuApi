@@ -12,7 +12,7 @@ class ProvideOsuInfo {
 	std::optional<uintptr_t> GetScoreInfo();
 public:
 	ProvideOsuInfo(const Handler_raii& handler, const uintptr_t &base_address) : base_address_(base_address), handler_(handler){}
-	std::optional<std::vector<std::string>> GetCurrentMods();
+	std::vector<std::string> GetCurrentMods();
 	std::optional<uint32_t> GetCurrentCombo();
 	std::optional<bool> GetPlayingState();
 };

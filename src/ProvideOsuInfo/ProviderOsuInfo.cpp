@@ -23,7 +23,7 @@ std::optional<uintptr_t> ProvideOsuInfo::GetCurrentScreenAddress()
 std::optional<uint32_t> ProvideOsuInfo::GetCurrentCombo()
 {
     uintptr_t score = Memory::RPM<uintptr_t>(handler_,
-        current_screen + OsuOffsets::Player_ScoreProcessor).value();
+        GetCurrentScreenAddress().value() + OsuOffsets::Player_ScoreProcessor).value();
 
     if (score == 0) return std::nullopt;
 
@@ -41,9 +41,9 @@ std::optional<bool> ProvideOsuInfo::GetPlayingState()
     uintptr_t game_score_manager = Memory::RPM<uintptr_t>(handler_,
         base_address_ + OsuOffsets::OsuGameBase_ScoreManager).value();
     uintptr_t player_api = Memory::RPM<uintptr_t>(handler_,
-        current_screen + OsuOffsets::Player_api).value();
+        GetCurrentScreenAddress().value() + OsuOffsets::Player_api).value();
     uintptr_t player_score_manager = Memory::RPM<uintptr_t>(handler_,
-        current_screen + OsuOffsets::Player_scoreManager).value();
+        GetCurrentScreenAddress().value() + OsuOffsets::Player_scoreManager).value();
 
     if (game_api == 0 || game_score_manager == 0 || player_api == 0 || player_score_manager == 0) {
         return std::nullopt;

@@ -3,23 +3,27 @@
 #include "../../include/Memory/Memory.h"
 #include <DotNetString.h>
 #include "algorithm"
+#include "iostream"
+
+int a = 0;
 
 std::optional<uintptr_t> ProvideOsuInfo::GetCurrentScreenAddress()
 {
-    uintptr_t screen_stack = Memory::RPM<uintptr_t>(handler_,
-        base_address_ + OsuOffsets::OsuGame_ScreenStack).value();
+    auto screen_stack = Memory::RPM<uintptr_t>(handler_,
+        base_address_ + OsuOffsets::OsuGame_ScreenStack);
 
-    uintptr_t stack = Memory::RPM<uintptr_t>(handler_,
-        screen_stack + OsuOffsets::ScreenStack_stack).value();
+    auto stack = Memory::RPM<uintptr_t>(handler_,
+        *screen_stack + OsuOffsets::ScreenStack_stack);
 
-    uint32_t count = Memory::RPM<uint32_t>(handler_, stack + 0x10).value();
+    auto count = Memory::RPM<uint32_t>(handler_, *stack + 0x10);
 
-    uintptr_t items = Memory::RPM<uintptr_t>(handler_, stack + 0x8).value();
+    auto items = Memory::RPM<uintptr_t>(handler_, *stack + 0x8);
 
-    if (count <= 0 || items == 0)
+
+    if (count <= 0 || items == 0 || !screen_stack || !stack || !count || !items)
         return std::nullopt;
 
-    return Memory::RPM<uintptr_t>(handler_, items + 0x10 + 0x8 * (count - 1));
+    return Memory::RPM<uintptr_t>(handler_, *items + 0x10 + 0x8 * (*count - 1));
 }
 
 std::optional<uintptr_t> ProvideOsuInfo::GetScoreInfo()
@@ -30,21 +34,32 @@ std::optional<uintptr_t> ProvideOsuInfo::GetScoreInfo()
         return std::nullopt;
     }
 
-    uintptr_t player_score = Memory::RPM<uintptr_t>(handler_, screen.value() + OsuOffsets::Player_Score).value();
-    uintptr_t score_info = Memory::RPM<uintptr_t>(handler_, player_score + 0x8).value();
+    auto player_score = Memory::RPM<uintptr_t>(handler_, screen.value() + OsuOffsets::Player_Score);
+    if (!player_score) {
+        return std::nullopt;
+    }
+
+    auto score_info = Memory::RPM<uintptr_t>(handler_, *player_score + 0x8);
+    if (!player_score) {
+        return std::nullopt;
+    }
 
 	return score_info == 0 ? std::nullopt : std::optional<uintptr_t>(score_info);
 }
 
 std::vector<std::string> ProvideOsuInfo::GetCurrentMods()
 {
+
     std::vector<std::string> mods;
     auto score_info = GetScoreInfo();
-    if (!score_info)
+    if (!score_info || !GetPlayingState())
         return mods;
 
-    uintptr_t string_address = Memory::RPM<uintptr_t>(handler_, score_info.value() + OsuOffsets::ScoreInfo_ModsJson).value();
-    std::wstring mods_json = DotNetString::Read(handler_, string_address).value_or(L"");
+    auto string_address = Memory::RPM<uintptr_t>(handler_, score_info.value() + OsuOffsets::ScoreInfo_ModsJson);
+    if (!string_address)
+        return mods;
+
+    std::wstring mods_json = DotNetString::Read(handler_, *string_address).value_or(L"");
 
     if (mods_json.empty()) return mods;
 
@@ -71,32 +86,38 @@ std::vector<std::string> ProvideOsuInfo::GetCurrentMods()
     return mods;
 }
 
-std::optional<int32_t> ProvideOsuInfo::GetCurrentCombo()
+int ProvideOsuInfo::GetCurrentCombo()
 {
+    if (!GetPlayingState()) return 1;
+
     auto screen = GetCurrentScreenAddress();
     if (!screen) {
         std::cout << "GetPlayingState: can't get get current screen address" << std::endl;
-        return std::nullopt;
+        return -1;
     }
 
-    uintptr_t score = Memory::RPM<uintptr_t>(handler_,
-        screen.value() + OsuOffsets::Player_ScoreProcessor).value();
+    auto score = Memory::RPM<uintptr_t>(handler_,
+        screen.value() + OsuOffsets::Player_ScoreProcessor);
 
-    if (score == 0) return std::nullopt;
+    if (!score) {
+        return -1;
+    }
 
-    uintptr_t combo = Memory::RPM<uintptr_t>(handler_,
-        score + OsuOffsets::OsuScoreProcessor_Combo).value();
-    if (combo == 0) return std::nullopt;
+    auto combo = Memory::RPM<uintptr_t>(handler_,
+        *score + OsuOffsets::OsuScoreProcessor_Combo);
+    if (!combo) {
+        return -1;
+    }
 
-    return Memory::RPM<int32_t>(handler_, combo + 0x40);
+    return Memory::RPM<int>(handler_, combo.value() + 0x40).value();
 }
 
-std::optional<bool> ProvideOsuInfo::GetPlayingState()
+bool ProvideOsuInfo::GetPlayingState()
 {
     auto screen = GetCurrentScreenAddress();
     if (!screen) {
         std::cout << "GetPlayingState: can't get get current screen address" << std::endl;
-		return std::nullopt;
+        return false;
     }
 
     auto game_api = Memory::RPM<uintptr_t>(handler_,
@@ -109,7 +130,7 @@ std::optional<bool> ProvideOsuInfo::GetPlayingState()
         screen.value() + OsuOffsets::Player_scoreManager);
 
     if (!game_api || !game_score_manager || !player_api || !player_score_manager) {
-        return std::nullopt;
+        return false;
     }
 
     return player_api == game_api && player_score_manager == game_score_manager;

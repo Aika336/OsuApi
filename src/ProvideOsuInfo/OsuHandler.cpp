@@ -17,7 +17,7 @@ OsuHandler::OsuHandler()
 		std::cout << "Failed to find the game base address." << std::endl;
 	}
 
-	osu_info_ = new ProvideOsuInfo(std::move(handler), game_base_address.value());
+	osu_info_ = std::make_unique<ProvideOsuInfo>(std::move(handler), game_base_address.value());
 }
 
 void OsuHandler::UpdateGameState()

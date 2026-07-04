@@ -1,5 +1,3 @@
-#pragma once
-
 #include "ProcessMemoryScanner.h"
 #include <Windows.h>
 

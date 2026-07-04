@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <string>
+#include <memory>
 #include <ProviderOsuInfo.h>
 
 const std::vector<uint8_t> signature_ = {
@@ -27,10 +28,9 @@ struct GameState {
 
 class OsuHandler {
 	GameState game_state_;
-	ProvideOsuInfo* osu_info_;
+    std::unique_ptr<ProvideOsuInfo> osu_info_;
 public:
 	OsuHandler();
 	void UpdateGameState();
 	const GameState GetGameState();
-    ~OsuHandler() { delete osu_info_; }
 };

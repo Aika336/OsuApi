@@ -22,9 +22,9 @@ OsuHandler::OsuHandler()
 
 void OsuHandler::UpdateGameState()
 {
-	game_state_.current_combo = osu_info_->GetCurrentCombo().value();
+	game_state_.current_combo = osu_info_->GetCurrentCombo();
 	game_state_.current_mods = osu_info_->GetCurrentMods();
-	game_state_.is_playing = osu_info_->GetPlayingState().value();
+	game_state_.is_playing = osu_info_->GetPlayingState();
 }
 
 const GameState OsuHandler::GetGameState()

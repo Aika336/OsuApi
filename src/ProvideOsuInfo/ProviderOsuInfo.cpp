@@ -5,8 +5,6 @@
 #include "algorithm"
 #include "iostream"
 
-int a = 0;
-
 std::optional<uintptr_t> ProvideOsuInfo::GetCurrentScreenAddress()
 {
     auto screen_stack = Memory::RPM<uintptr_t>(handler_,

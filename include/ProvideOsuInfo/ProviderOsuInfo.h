@@ -7,7 +7,6 @@
 
 class ProvideOsuInfo {
 	uintptr_t base_address_;
-	uintptr_t current_screen;
 	Handler_raii handler_;
 
 	std::optional<uintptr_t> GetCurrentScreenAddress();
@@ -17,7 +16,4 @@ public:
 	std::vector<std::string> GetCurrentMods();
 	int GetCurrentCombo();
 	bool GetPlayingState();
-	~ProvideOsuInfo() {
-		CloseHandle(handler_.hProcess);
-	}
 };

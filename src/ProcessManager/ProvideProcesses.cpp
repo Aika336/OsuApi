@@ -10,7 +10,7 @@ std::optional<ProcessInfo> ProvideProcesses::FindProcessByName(const std::wstrin
 	std::vector<ProcessInfo> processes = GetAllProcesses();
 	if (processes.size() == 0) {
 		std::cout << "ProvideProcesses::FindProcessByName: No processes found." << std::endl;
-		return ProcessInfo(0,L"");
+		return std::nullopt;
 	}
 
 	for (const auto& process : processes) {

@@ -1,5 +1,3 @@
-#pragma once
-
 #include "ProvideProcesses.h"
 
 #include <TlHelp32.h>

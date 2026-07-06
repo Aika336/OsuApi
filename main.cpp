@@ -2,7 +2,6 @@
 #include <OsuHandler.h>
 
 int main() {
-
 	OsuHandler handler;
 	GameState g_state = handler.GetGameState();
 	while (1) {

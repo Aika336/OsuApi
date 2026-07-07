@@ -8,8 +8,7 @@ std::optional<ProcessInfo> ProcessProvider::FindProcessByName(const std::wstring
 {
 	std::vector<ProcessInfo> processes = GetAllProcesses();
 	if (processes.size() == 0) {
-		LOG("ProvideProcesses::FindProcessByName: No processes found.");
-		return std::nullopt;
+		throw std::runtime_error("No process found");
 	}
 
 	for (const auto& process : processes) {

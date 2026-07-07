@@ -1,6 +1,6 @@
 #include "OsuHandler.h"
-#include <OpenProcess.h>
-#include <ProvideProcesses.h>
+#include <ProcessOpener.h>
+#include <ProcessProvider.h>
 #include <ProcessMemoryScanner.h>
 #include "Logger.h"
 

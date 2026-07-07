@@ -9,12 +9,12 @@
 
 class OsuInfoProvider {
 	uintptr_t base_address_;
-	HandleRaii handler_;
+	HandleRaii handle_;
 
 	std::optional<uintptr_t> GetCurrentScreenAddress();
 	std::optional<uintptr_t> GetScoreInfo();
 public:
-	OsuInfoProvider(HandleRaii handler, const uintptr_t& base_address);
+	OsuInfoProvider(HandleRaii handle, const uintptr_t& base_address);
 	std::vector<std::string> GetCurrentMods();
 	int GetCurrentCombo();
 	bool GetPlayingState();

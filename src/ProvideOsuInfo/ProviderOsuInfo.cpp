@@ -9,22 +9,22 @@
 
 std::optional<uintptr_t> OsuInfoProvider::GetCurrentScreenAddress()
 {
-    auto screen_stack = Memory::ReadAs<uintptr_t>(handler_,
+    auto screen_stack = Memory::ReadAs<uintptr_t>(handle_,
         base_address_ + OsuOffsets::OsuGame_ScreenStack);
 
-    auto stack = Memory::ReadAs<uintptr_t>(handler_,
+    auto stack = Memory::ReadAs<uintptr_t>(handle_,
         *screen_stack + OsuOffsets::ScreenStack_stack);
 
-    auto count = Memory::ReadAs<uint32_t>(handler_, *stack + 0x10);
+    auto count = Memory::ReadAs<uint32_t>(handle_, *stack + 0x10);
 
-    auto items = Memory::ReadAs<uintptr_t>(handler_, *stack + 0x8);
+    auto items = Memory::ReadAs<uintptr_t>(handle_, *stack + 0x8);
 
 
     if (count <= 0 || items == 0 || !screen_stack || !stack || !count || !items) {
         return std::nullopt;
     }
 
-    return Memory::ReadAs<uintptr_t>(handler_, *items + 0x10 + 0x8 * (*count - 1));
+    return Memory::ReadAs<uintptr_t>(handle_, *items + 0x10 + 0x8 * (*count - 1));
 }
 
 std::optional<uintptr_t> OsuInfoProvider::GetScoreInfo()
@@ -35,12 +35,12 @@ std::optional<uintptr_t> OsuInfoProvider::GetScoreInfo()
         return std::nullopt;
     }
 
-    auto player_score = Memory::ReadAs<uintptr_t>(handler_, screen.value() + OsuOffsets::Player_Score);
+    auto player_score = Memory::ReadAs<uintptr_t>(handle_, screen.value() + OsuOffsets::Player_Score);
     if (!player_score) {
         return std::nullopt;
     }
 
-    auto score_info = Memory::ReadAs<uintptr_t>(handler_, *player_score + 0x8);
+    auto score_info = Memory::ReadAs<uintptr_t>(handle_, *player_score + 0x8);
     if (!player_score) {
         return std::nullopt;
     }
@@ -48,8 +48,8 @@ std::optional<uintptr_t> OsuInfoProvider::GetScoreInfo()
 	return score_info == 0 ? std::nullopt : std::optional<uintptr_t>(score_info);
 }
 
-OsuInfoProvider::OsuInfoProvider(HandleRaii handler, const uintptr_t& base_address) :
-    base_address_(base_address), handler_(std::move(handler))
+OsuInfoProvider::OsuInfoProvider(HandleRaii handle, const uintptr_t& base_address) :
+    base_address_(base_address), handle_(std::move(handle))
 {}
 
 std::vector<std::string> OsuInfoProvider::GetCurrentMods()
@@ -60,11 +60,11 @@ std::vector<std::string> OsuInfoProvider::GetCurrentMods()
     if (!score_info || !GetPlayingState())
         return mods;
 
-    auto string_address = Memory::ReadAs<uintptr_t>(handler_, score_info.value() + OsuOffsets::ScoreInfo_ModsJson);
+    auto string_address = Memory::ReadAs<uintptr_t>(handle_, score_info.value() + OsuOffsets::ScoreInfo_ModsJson);
     if (!string_address)
         return mods;
 
-    std::wstring mods_json = DotNetString::Read(handler_, *string_address).value_or(L"");
+    std::wstring mods_json = DotNetString::Read(handle_, *string_address).value_or(L"");
 
     if (mods_json.empty()) return mods;
 
@@ -101,20 +101,20 @@ int OsuInfoProvider::GetCurrentCombo()
         return -1;
     }
 
-    auto score = Memory::ReadAs<uintptr_t>(handler_,
+    auto score = Memory::ReadAs<uintptr_t>(handle_,
         screen.value() + OsuOffsets::Player_ScoreProcessor);
 
     if (!score) {
         return -1;
     }
 
-    auto combo = Memory::ReadAs<uintptr_t>(handler_,
+    auto combo = Memory::ReadAs<uintptr_t>(handle_,
         *score + OsuOffsets::OsuScoreProcessor_Combo);
     if (!combo) {
         return -1;
     }
 
-    auto combo_value = Memory::ReadAs<int>(handler_, combo.value() + 0x40);
+    auto combo_value = Memory::ReadAs<int>(handle_, combo.value() + 0x40);
     if (!combo_value) {
         return -1;
     }
@@ -130,13 +130,13 @@ bool OsuInfoProvider::GetPlayingState()
         return false;
     }
 
-    auto game_api = Memory::ReadAs<uintptr_t>(handler_,
+    auto game_api = Memory::ReadAs<uintptr_t>(handle_,
         base_address_ + OsuOffsets::OsuGameBase_API);
-    auto game_score_manager = Memory::ReadAs<uintptr_t>(handler_,
+    auto game_score_manager = Memory::ReadAs<uintptr_t>(handle_,
         base_address_ + OsuOffsets::OsuGameBase_ScoreManager);
-    auto player_api = Memory::ReadAs<uintptr_t>(handler_,
+    auto player_api = Memory::ReadAs<uintptr_t>(handle_,
         screen.value() + OsuOffsets::Player_api);
-    auto player_score_manager = Memory::ReadAs<uintptr_t>(handler_,
+    auto player_score_manager = Memory::ReadAs<uintptr_t>(handle_,
         screen.value() + OsuOffsets::Player_scoreManager);
 
     if (!game_api || !game_score_manager || !player_api || !player_score_manager) {

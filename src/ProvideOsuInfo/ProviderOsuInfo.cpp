@@ -1,7 +1,8 @@
 #include <OsuOffset.h>
 #include <DotNetString.h>
 #include "ProviderOsuInfo.h"
-#include "../../include/Memory/Memory.h"
+#include "Memory.h"
+#include "Logger.h"
 
 #include <algorithm>
 #include <iostream>
@@ -19,8 +20,9 @@ std::optional<uintptr_t> OsuInfoProvider::GetCurrentScreenAddress()
     auto items = Memory::ReadAs<uintptr_t>(handler_, *stack + 0x8);
 
 
-    if (count <= 0 || items == 0 || !screen_stack || !stack || !count || !items)
+    if (count <= 0 || items == 0 || !screen_stack || !stack || !count || !items) {
         return std::nullopt;
+    }
 
     return Memory::ReadAs<uintptr_t>(handler_, *items + 0x10 + 0x8 * (*count - 1));
 }

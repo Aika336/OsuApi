@@ -1,4 +1,5 @@
 #include "ProvideProcesses.h"
+#include <Logger.h>
 
 #include <TlHelp32.h>
 #include <iostream>
@@ -7,7 +8,7 @@ std::optional<ProcessInfo> ProvideProcesses::FindProcessByName(const std::wstrin
 {
 	std::vector<ProcessInfo> processes = GetAllProcesses();
 	if (processes.size() == 0) {
-		std::cout << "ProvideProcesses::FindProcessByName: No processes found." << std::endl;
+		LOG("ProvideProcesses::FindProcessByName: No processes found.");
 		return std::nullopt;
 	}
 
@@ -17,6 +18,7 @@ std::optional<ProcessInfo> ProvideProcesses::FindProcessByName(const std::wstrin
 		}
 	}
 
+	LOG("ProvideProcesses::FindProcessByName: No find process by name " + std::string(name.begin(), name.end()));
 	return std::nullopt;
 }
 
@@ -24,7 +26,7 @@ std::vector<ProcessInfo> ProvideProcesses::GetAllProcesses() {
 	std::vector<ProcessInfo> processes;
 	HANDLE snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
 	if (snapshot == INVALID_HANDLE_VALUE) {
-		std::cout << "ProvideProcesses::GetAllProcesses: Failed to create process snapshot." << std::endl;
+		LOG_ERROR("ProvideProcesses::GetAllProcesses: Failed to create process snapshot.");
 		return processes;
 	}
 

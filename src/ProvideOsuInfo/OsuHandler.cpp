@@ -2,19 +2,20 @@
 #include <OpenProcess.h>
 #include <ProvideProcesses.h>
 #include <ProcessMemoryScanner.h>
+#include "Logger.h"
 
 OsuHandler::OsuHandler()
 {
 	auto process_info = ProvideProcesses::GetProcessByName(L"osu!.exe");
 	if (!process_info) {
-		std::cout << "Process not found." << std::endl;
+		LOG_ERROR("Can not find a process with name osu!.exe");
 	}
 
 	HandleRaii handler = OpenProcess::OpenProcessForReadWrite(process_info.value());
 
 	auto game_base_address = ProcessMemoryScanner::ScanProcessMemoryForSignature(handler, PatternMatcher(signature_, mask_, 32));
 	if (!game_base_address) {
-		std::cout << "Failed to find the game base address." << std::endl;
+		LOG_ERROR("Failed to find the game base address.");
 	}
 
 	osu_info_ = std::make_unique<OsuInfoProvider>(std::move(handler), game_base_address.value());

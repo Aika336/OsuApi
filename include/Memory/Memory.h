@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../ProcessManager/HandlerRaii.h"
+#include "Logger.h"
 
 #include <Windows.h>
 #include <string>
@@ -27,7 +28,7 @@ inline std::optional<T> Memory::ReadAs(const HandleRaii& handler, uintptr_t addr
 
 	if (!ReadProcessMemory(handler.hProcess, reinterpret_cast<LPVOID>(address), &value, sizeof(T), &read_bytes) 
 		|| read_bytes != sizeof(T)) {
-		std::cout << "Failed to read memory at address: " << std::hex << address << std::dec << std::endl;
+		LOG_ERROR("Failed to read memory at address: " + address);
 		return std::nullopt;
 	}
 

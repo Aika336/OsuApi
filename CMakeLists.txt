@@ -33,6 +33,7 @@ add_library(Memory
 add_library(ProvideOsuInfo
     include/ProvideOsuInfo/ProviderOsuInfo.h
     include/ProvideOsuInfo/OsuHandler.h
+    include/ProvideOsuInfo/OsuSignatureInfo.h
     # src
     src/ProvideOsuInfo/ProviderOsuInfo.cpp
     src/ProvideOsuInfo/OsuHandler.cpp

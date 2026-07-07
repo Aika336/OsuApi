@@ -1,6 +1,8 @@
 #pragma once
-#include <Windows.h>
+
 #include "HandlerRaii.h"
+
+#include <Windows.h>
 #include <vector>
 #include <string>
 #include <optional>

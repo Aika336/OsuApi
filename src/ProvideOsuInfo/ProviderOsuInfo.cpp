@@ -1,9 +1,10 @@
-#include "ProviderOsuInfo.h"
 #include <OsuOffset.h>
-#include "../../include/Memory/Memory.h"
 #include <DotNetString.h>
-#include "algorithm"
-#include "iostream"
+#include "ProviderOsuInfo.h"
+#include "../../include/Memory/Memory.h"
+
+#include <algorithm>
+#include <iostream>
 
 std::optional<uintptr_t> ProvideOsuInfo::GetCurrentScreenAddress()
 {

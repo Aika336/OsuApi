@@ -1,4 +1,5 @@
 #include "ProcessMemoryScanner.h"
+
 #include <Windows.h>
 
 std::optional<uintptr_t> ProcessMemoryScanner::ScanProcessMemoryForSignature(const Handler_raii& handler, PatternMatcher mather)

@@ -1,7 +1,8 @@
 #pragma once
 
-#include <vector>
 #include "Process_info.h"
+
+#include <vector>
 #include <optional>
 
 class ProvideProcesses {

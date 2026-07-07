@@ -1,8 +1,9 @@
 #pragma once
 
-#include <Windows.h>
 #include "HandlerRaii.h"
 #include <Process_info.h>
+
+#include <Windows.h>
 
 class OpenProcess {
 public:

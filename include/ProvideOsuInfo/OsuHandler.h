@@ -1,8 +1,10 @@
 #pragma once
+
+#include <ProviderOsuInfo.h>
+
 #include <vector>
 #include <string>
 #include <memory>
-#include <ProviderOsuInfo.h>
 
 const std::vector<uint8_t> signature_ = {
         0x67, 0x00, 0x20, 0x00, 0x6F, 0x00, 0x6E, 0x00,

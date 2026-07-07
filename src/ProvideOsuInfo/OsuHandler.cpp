@@ -1,7 +1,7 @@
 #include "OsuHandler.h"
-#include <ProcessOpener.h>
-#include <ProcessProvider.h>
-#include <ProcessMemoryScanner.h>
+#include "ProcessOpener.h"
+#include "ProcessProvider.h"
+#include "ProcessMemoryScanner.h"
 #include "Logger.h"
 
 OsuHandler::OsuHandler()

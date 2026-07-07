@@ -1,7 +1,7 @@
 #pragma once
 
 #include "HandlerRaii.h"
-#include <ProcessInfo.h>
+#include "ProcessInfo.h"
 
 #include <Windows.h>
 

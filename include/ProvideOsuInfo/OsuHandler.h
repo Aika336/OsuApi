@@ -1,6 +1,6 @@
 #pragma once
 
-#include <ProviderOsuInfo.h>
+#include "ProviderOsuInfo.h"
 #include "OsuSignatureInfo.h"
 
 #include <vector>

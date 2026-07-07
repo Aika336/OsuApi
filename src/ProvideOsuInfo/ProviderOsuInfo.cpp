@@ -1,5 +1,5 @@
-#include <OsuOffset.h>
-#include <DotNetString.h>
+#include "OsuOffset.h"
+#include "DotNetString.h"
 #include "ProviderOsuInfo.h"
 #include "Memory.h"
 #include "Logger.h"

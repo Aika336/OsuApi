@@ -6,7 +6,7 @@
 
 OsuHandler::OsuHandler()
 {
-	auto process_info = ProvideProcesses::GetProcessByName(L"osu!.exe");
+	auto process_info = ProcessProvider::GetProcessByName(L"osu!.exe");
 	if (!process_info) {
 		LOG_ERROR("Can not find a process with name osu!.exe");
 	}

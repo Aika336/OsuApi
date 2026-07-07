@@ -4,13 +4,13 @@ project(OsuApi CXX)
 set(CMAKE_CXX_STANDARD 20)
 
 add_library(ProcessManager
-    include/ProcessManager/ProvideProcesses.h
+    include/ProcessManager/ProcessProvider.h
     include/ProcessManager/ProcessInfo.h
-    include/ProcessManager/OpenProcess.h
+    include/ProcessManager/ProcessOpener.h
     include/ProcessManager/HandlerRaii.h
     # src
-    src/ProcessManager/ProvideProcesses.cpp
-    src/ProcessManager/OpenProcess.cpp
+    src/ProcessManager/ProcessProvider.cpp
+    src/ProcessManager/ProcessOpener.cpp
     src/ProcessManager/HandlerRaii.cpp
 )
 

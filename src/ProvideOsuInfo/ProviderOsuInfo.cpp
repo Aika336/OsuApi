@@ -98,14 +98,20 @@ int ProvideOsuInfo::GetCurrentCombo()
     auto score = Memory::ReadAs<uintptr_t>(handler_,
         screen.value() + OsuOffsets::Player_ScoreProcessor);
 
-    if (!score) return -1;
+    if (!score) {
+        return -1;
+    }
 
     auto combo = Memory::ReadAs<uintptr_t>(handler_,
         *score + OsuOffsets::OsuScoreProcessor_Combo);
-    if (!combo) return -1;
+    if (!combo) {
+        return -1;
+    }
 
     auto combo_value = Memory::ReadAs<int>(handler_, combo.value() + 0x40);
-    if (!combo_value) return -1;
+    if (!combo_value) {
+        return -1;
+    }
 
     return *combo_value;
 }

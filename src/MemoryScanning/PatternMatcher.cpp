@@ -4,7 +4,9 @@ std::optional<size_t> PatternMatcher::CheckForStableSignature(const std::vector<
 {
 	const size_t sig_size = signature.size();
 
-	if (sig_size == 0 || sig_size != mask.size() || sig_size > region_bytes.size()) return std::nullopt;
+	if (sig_size == 0 || sig_size != mask.size() || sig_size > region_bytes.size()) {
+		return std::nullopt;
+	}
 
 	const size_t last_index = region_bytes.size() - sig_size;
 
@@ -17,7 +19,9 @@ std::optional<size_t> PatternMatcher::CheckForStableSignature(const std::vector<
 			}
 		}
 
-		if (match) return static_cast<int>(offset);
+		if (match) {
+			return static_cast<int>(offset);
+		}
 	}
 
     return std::nullopt;

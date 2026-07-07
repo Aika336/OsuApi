@@ -6,7 +6,7 @@ std::optional<std::wstring> DotNetString::Read(const Handler_raii& handler, uint
         return std::nullopt;
     }
 
-    auto length = Memory::RPM<int32_t>(handler, address + kLengthOffset);
+    auto length = Memory::ReadAs<int32_t>(handler, address + kLengthOffset);
     if (!length || *length <= 0 || static_cast<uint32_t>(*length) > kMaxLength) {
         return std::nullopt;
     }

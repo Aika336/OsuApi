@@ -7,11 +7,11 @@ add_library(ProcessManager STATIC
     include/ProcessManager/ProcessProvider.h
     include/ProcessManager/ProcessInfo.h
     include/ProcessManager/ProcessOpener.h
-    include/ProcessManager/HandlerRaii.h
+    include/ProcessManager/HandleRaii.h
     # src
     src/ProcessManager/ProcessProvider.cpp
     src/ProcessManager/ProcessOpener.cpp
-    src/ProcessManager/HandlerRaii.cpp
+    src/ProcessManager/HandleRaii.cpp
 )
 
 add_library(MemoryScanning STATIC

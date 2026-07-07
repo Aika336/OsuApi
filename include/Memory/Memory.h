@@ -13,7 +13,10 @@ public:
 	template<typename T>
 	static std::optional<T> ReadAs(const Handler_raii& handler, uintptr_t address);
 
-	static std::optional<std::vector<uint8_t>> ReadMemoryRegion(const Handler_raii& handler, uintptr_t address, size_t size);
+	static std::optional<std::vector<uint8_t>> ReadMemoryRegion(
+		const Handler_raii& handler, 
+		uintptr_t address, size_t size
+	);
 };
 
 template<typename T>

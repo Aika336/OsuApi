@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-namespace Logger {
+namespace logger {
 	void Log(const std::string& msg) {
 		std::cout << msg << std::endl;
 	}

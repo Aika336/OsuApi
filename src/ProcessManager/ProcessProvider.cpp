@@ -24,15 +24,14 @@ std::vector<ProcessInfo> ProcessProvider::GetAllProcesses() {
 	std::vector<ProcessInfo> processes;
 	HANDLE snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
 	if (snapshot == INVALID_HANDLE_VALUE) {
-		LOG_ERROR("ProvideProcesses::GetAllProcesses: Failed to create process snapshot.");
-		return processes;
+		throw std::runtime_error("ProvideProcesses::GetAllProcesses: Failed to create process snapshot.");
 	}
 
 	PROCESSENTRY32W pe = { sizeof(pe) };
 	if (Process32FirstW(snapshot, &pe)) {
 		do {
 			ProcessInfo p{ pe.th32ProcessID, std::wstring(pe.szExeFile) };
-			processes.push_back(p);
+			processes.emplace_back(p);
 		} while (Process32NextW(snapshot, &pe));
 	}
 

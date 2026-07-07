@@ -10,12 +10,16 @@ std::optional<std::wstring> DotNetString::Read(const HandleRaii& handler, uintpt
     auto length = Memory::ReadAs<int32_t>(handler, address + k_kength_offset_);
     // !length не смог прочитать значения | *length <= 0, адресс прочитан но там мусор | > kMaxLength похоже на строку, но неправдоподобнной длинны
     if (!length || *length <= 0 || static_cast<uint32_t>(*length) > k_max_length_) {
+        std::cout << "DotNetString::Read: failed to read at " 
+            << std::hex << address + k_kength_offset_<< std::dec << std::endl;
         return std::nullopt;
     }
 
     const size_t byte_size = static_cast<size_t>(*length) * sizeof(wchar_t);
     auto raw_bytes = Memory::ReadMemoryRegion(handler, address + k_data_offset_, byte_size);
     if (!raw_bytes || raw_bytes->size() != byte_size) {
+        std::cout << "DotNetString::Read: failed to read " << byte_size << " bytes of string data at "
+            << std::hex << address + k_data_offset_ << std::dec << std::endl;
         return std::nullopt;
     }
 

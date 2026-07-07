@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 20)
 
 add_library(ProcessManager
     include/ProcessManager/ProvideProcesses.h
-    include/ProcessManager/Process_info.h
+    include/ProcessManager/ProcessInfo.h
     include/ProcessManager/OpenProcess.h
     include/ProcessManager/HandlerRaii.h
     # src
@@ -38,10 +38,17 @@ add_library(ProvideOsuInfo
     src/ProvideOsuInfo/OsuHandler.cpp
 )
 
+add_library(Logger
+    include/Logger/Logger.h
+    #
+    src/Logger/Logger.cpp
+)
+
 
 target_include_directories(ProcessManager PUBLIC include/ProcessManager)
 target_include_directories(MemoryScanning PUBLIC include/MemoryScanning)
 target_include_directories(Memory PUBLIC include/Memory)
+target_include_directories(Logger PUBLIC include/Logger)
 target_include_directories(ProvideOsuInfo PUBLIC 
     include/ProvideOsuInfo
     include/ProvideOsuInfo/OsuOffsets

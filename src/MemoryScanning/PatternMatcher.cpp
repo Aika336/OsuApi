@@ -1,6 +1,6 @@
 #include "PatternMatcher.h"
 
-std::optional<size_t> PatternMatcher::CheckForStableSignature(const std::vector<uint8_t>& region_bytes) const
+std::optional<size_t> PatternMatcher::CheckForSignature(const std::vector<uint8_t>& region_bytes) const
 {
 	const size_t sig_size = signature_.size();
 

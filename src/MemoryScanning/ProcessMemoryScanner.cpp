@@ -16,7 +16,7 @@ std::optional<uintptr_t> ProcessMemoryScanner::ScanProcessMemoryForSignature(con
             std::vector<uint8_t> regionBytes(mbi.RegionSize);
             SIZE_T bytes_read = 0;
             if (ReadProcessMemory(handler.hProcess, mbi.BaseAddress, regionBytes.data(), mbi.RegionSize, &bytes_read) > 0) {
-                if (auto offset = mather.CheckForStableSignature(regionBytes)) {
+                if (auto offset = mather.CheckForSignature(regionBytes)) {
                     return static_cast<uintptr_t>((SIZE_T)mbi.BaseAddress + offset.value() + mather.getOffset());
                 }
             }

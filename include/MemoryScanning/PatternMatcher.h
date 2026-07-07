@@ -16,6 +16,6 @@ public:
 			throw std::runtime_error("Error: Signature and mask must be of the same size.");
 		}
 	}
-	std::optional<size_t> CheckForStableSignature(const std::vector<uint8_t>& region_bytes) const;
+	std::optional<size_t> CheckForSignature(const std::vector<uint8_t>& region_bytes) const;
 	int getOffset() const { return offset; }
 };

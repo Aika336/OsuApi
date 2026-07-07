@@ -3,7 +3,7 @@ project(OsuApi CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_library(ProcessManager
+add_library(ProcessManager STATIC
     include/ProcessManager/ProcessProvider.h
     include/ProcessManager/ProcessInfo.h
     include/ProcessManager/ProcessOpener.h
@@ -14,7 +14,7 @@ add_library(ProcessManager
     src/ProcessManager/HandlerRaii.cpp
 )
 
-add_library(MemoryScanning 
+add_library(MemoryScanning STATIC
     include/MemoryScanning/PatternMatcher.h
     include/MemoryScanning/ProcessMemoryScanner.h
     # src
@@ -22,7 +22,7 @@ add_library(MemoryScanning
     src/MemoryScanning/PatternMatcher.cpp
 )
 
-add_library(Memory
+add_library(Memory STATIC
     include/Memory/Memory.h
     include/Memory/DotNetString.h
     # src
@@ -30,7 +30,7 @@ add_library(Memory
     src/Memory/DotNetString.cpp
 )
 
-add_library(ProvideOsuInfo
+add_library(ProvideOsuInfo STATIC
     include/ProvideOsuInfo/ProviderOsuInfo.h
     include/ProvideOsuInfo/OsuHandler.h
     include/ProvideOsuInfo/OsuSignatureInfo.h
@@ -39,16 +39,23 @@ add_library(ProvideOsuInfo
     src/ProvideOsuInfo/OsuHandler.cpp
 )
 
-add_library(Logger
+add_library(Logger STATIC
     include/Logger/Logger.h
     #
     src/Logger/Logger.cpp
 )
 
-target_include_directories(ProcessManager PUBLIC include/ProcessManager)
-target_include_directories(MemoryScanning PUBLIC include/MemoryScanning)
-target_include_directories(Memory PUBLIC include/Memory)
-target_include_directories(Logger PUBLIC include/Logger)
+target_include_directories(ProcessManager PUBLIC 
+    include/ProcessManager
+)
+target_include_directories( MemoryScanning PUBLIC 
+    include/MemoryScanning)
+target_include_directories(Memory 
+    PUBLIC include/Memory
+)
+target_include_directories(Logger PUBLIC 
+    include/Logger
+)
 target_include_directories(ProvideOsuInfo PUBLIC 
     include/ProvideOsuInfo
     include/ProvideOsuInfo/OsuOffsets
@@ -62,6 +69,13 @@ add_executable(OsuApi
     main.cpp
 )
 
-target_link_libraries(OsuApi PRIVATE ProvideOsuInfo)
-target_link_libraries(MemoryScanning PUBLIC ProcessManager)
-target_link_libraries(ProvideOsuInfo PUBLIC Memory MemoryScanning)
+target_link_libraries(OsuApi PRIVATE
+    ProvideOsuInfo
+)
+target_link_libraries(MemoryScanning PUBLIC 
+    ProcessManager
+)
+target_link_libraries(ProvideOsuInfo PUBLIC
+    Memory 
+    MemoryScanning
+)

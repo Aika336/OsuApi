@@ -8,7 +8,7 @@
 class PatternMatcher {
 	std::vector<uint8_t> signature_;
 	std::vector<uint8_t> signature_mask_;
-	int offset;
+	int offset_;
 public:
 	PatternMatcher() = delete;
 	PatternMatcher(const std::vector<uint8_t>& signature, 

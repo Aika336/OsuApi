@@ -5,7 +5,7 @@ PatternMatcher::PatternMatcher(const std::vector<uint8_t>& signature,
 	int offset
 ) : signature_(signature), 
 	signature_mask_(mask), 
-	offset(offset)
+	offset_(offset)
 {
 	if (signature.size() != mask.size()) {
 		throw std::runtime_error("Error: Signature and mask must be of the same size.");

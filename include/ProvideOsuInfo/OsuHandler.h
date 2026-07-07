@@ -30,7 +30,7 @@ struct GameState {
 
 class OsuHandler {
 	GameState game_state_;
-    std::unique_ptr<ProvideOsuInfo> osu_info_;
+    std::unique_ptr<OsuInfoProvider> osu_info_;
 public:
 	OsuHandler();
 	void UpdateGameState();

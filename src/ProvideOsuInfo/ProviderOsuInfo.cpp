@@ -6,7 +6,7 @@
 #include <algorithm>
 #include <iostream>
 
-std::optional<uintptr_t> ProvideOsuInfo::GetCurrentScreenAddress()
+std::optional<uintptr_t> OsuInfoProvider::GetCurrentScreenAddress()
 {
     auto screen_stack = Memory::ReadAs<uintptr_t>(handler_,
         base_address_ + OsuOffsets::OsuGame_ScreenStack);
@@ -25,7 +25,7 @@ std::optional<uintptr_t> ProvideOsuInfo::GetCurrentScreenAddress()
     return Memory::ReadAs<uintptr_t>(handler_, *items + 0x10 + 0x8 * (*count - 1));
 }
 
-std::optional<uintptr_t> ProvideOsuInfo::GetScoreInfo()
+std::optional<uintptr_t> OsuInfoProvider::GetScoreInfo()
 {
     auto screen = GetCurrentScreenAddress();
     if (!screen) {
@@ -46,11 +46,11 @@ std::optional<uintptr_t> ProvideOsuInfo::GetScoreInfo()
 	return score_info == 0 ? std::nullopt : std::optional<uintptr_t>(score_info);
 }
 
-ProvideOsuInfo::ProvideOsuInfo(HandleRaii handler, const uintptr_t& base_address) :
+OsuInfoProvider::OsuInfoProvider(HandleRaii handler, const uintptr_t& base_address) :
     base_address_(base_address), handler_(std::move(handler))
 {}
 
-std::vector<std::string> ProvideOsuInfo::GetCurrentMods()
+std::vector<std::string> OsuInfoProvider::GetCurrentMods()
 {
 
     std::vector<std::string> mods;
@@ -89,7 +89,7 @@ std::vector<std::string> ProvideOsuInfo::GetCurrentMods()
     return mods;
 }
 
-int ProvideOsuInfo::GetCurrentCombo()
+int OsuInfoProvider::GetCurrentCombo()
 {
     if (!GetPlayingState()) return 1;
 
@@ -120,7 +120,7 @@ int ProvideOsuInfo::GetCurrentCombo()
     return *combo_value;
 }
 
-bool ProvideOsuInfo::GetPlayingState()
+bool OsuInfoProvider::GetPlayingState()
 {
     auto screen = GetCurrentScreenAddress();
     if (!screen) {

@@ -14,7 +14,7 @@ class ProvideOsuInfo {
 	std::optional<uintptr_t> GetCurrentScreenAddress();
 	std::optional<uintptr_t> GetScoreInfo();
 public:
-	ProvideOsuInfo(Handler_raii handler, const uintptr_t &base_address) : base_address_(base_address), handler_(std::move(handler)){}
+	ProvideOsuInfo(Handler_raii handler, const uintptr_t& base_address);
 	std::vector<std::string> GetCurrentMods();
 	int GetCurrentCombo();
 	bool GetPlayingState();

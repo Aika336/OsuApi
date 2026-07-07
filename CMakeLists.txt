@@ -11,6 +11,7 @@ add_library(ProcessManager
     # src
     src/ProcessManager/ProvideProcesses.cpp
     src/ProcessManager/OpenProcess.cpp
+    src/ProcessManager/HandlerRaii.cpp
 )
 
 add_library(MemoryScanning 

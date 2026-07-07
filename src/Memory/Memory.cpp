@@ -12,7 +12,7 @@ std::optional<std::vector<uint8_t>> Memory::ReadMemoryRegion(
 	std::vector<uint8_t> buffer(size);
 	SIZE_T read_bytes = 0;
 	if (!ReadProcessMemory(handler.hProcess, reinterpret_cast<LPVOID>(address), buffer.data(), size, &read_bytes)) {
-		LOG_ERROR("Failed to read memory region at address: " + address);
+		LOG_ERROR("Failed to read memory region at address: " + std::format("0x{:x}", address));
 		return std::nullopt;
 	}
 

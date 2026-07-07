@@ -4,10 +4,10 @@
 #include "Logger.h"
 
 #include <Windows.h>
-#include <string>
 #include <vector>
 #include <iostream>
 #include <optional>
+#include <format>
 
 class Memory {
 public:
@@ -28,7 +28,7 @@ inline std::optional<T> Memory::ReadAs(const HandleRaii& handler, uintptr_t addr
 
 	if (!ReadProcessMemory(handler.hProcess, reinterpret_cast<LPVOID>(address), &value, sizeof(T), &read_bytes) 
 		|| read_bytes != sizeof(T)) {
-		LOG_ERROR("Failed to read memory at address: " + address);
+		LOG_ERROR("Failed to read memory at address: " + std::format("0x{:x}", address));
 		return std::nullopt;
 	}
 

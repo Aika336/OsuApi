@@ -7,7 +7,7 @@ namespace Logger {
 		std::cout << msg << std::endl;
 	}
 
-	void Log(const std::string& msg) {
+	void LogError(const std::string& msg) {
 		std::cerr << msg << std::endl;
 	}
 }

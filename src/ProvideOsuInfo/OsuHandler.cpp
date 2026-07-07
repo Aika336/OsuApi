@@ -13,7 +13,10 @@ OsuHandler::OsuHandler()
 
 	HandleRaii handler = ProcessOpener::OpenProcessForReadWrite(process_info.value());
 
-	auto game_base_address = ProcessMemoryScanner::ScanProcessMemoryForSignature(handler, PatternMatcher(signature_, mask_, 32));
+	auto game_base_address = ProcessMemoryScanner::ScanProcessMemoryForSignature(
+		handler, 
+		PatternMatcher(SignatureInfo::signature_, SignatureInfo::mask_, 32)
+	);
 	if (!game_base_address) {
 		LOG_ERROR("Failed to find the game base address.");
 	}

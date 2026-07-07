@@ -6,13 +6,13 @@ std::optional<std::wstring> DotNetString::Read(const Handler_raii& handler, uint
         return std::nullopt;
     }
 
-    auto length = Memory::ReadAs<int32_t>(handler, address + kLengthOffset);
-    if (!length || *length <= 0 || static_cast<uint32_t>(*length) > kMaxLength) {
+    auto length = Memory::ReadAs<int32_t>(handler, address + k_kength_offset_);
+    if (!length || *length <= 0 || static_cast<uint32_t>(*length) > k_max_length_) {
         return std::nullopt;
     }
 
     const size_t byte_size = static_cast<size_t>(*length) * sizeof(wchar_t);
-    auto raw_bytes = Memory::ReadMemoryRegion(handler, address + kDataOffset, byte_size);
+    auto raw_bytes = Memory::ReadMemoryRegion(handler, address + k_data_offset_, byte_size);
     if (!raw_bytes || raw_bytes->size() != byte_size) {
         return std::nullopt;
     }

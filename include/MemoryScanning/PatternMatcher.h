@@ -6,12 +6,12 @@
 #include <optional>
 
 class PatternMatcher {
-	std::vector<uint8_t> signature;
-	std::vector<uint8_t> mask;
+	std::vector<uint8_t> signature_;
+	std::vector<uint8_t> signature_mask_;
 	int offset;
 public:
 	PatternMatcher() = delete;
-	PatternMatcher(const std::vector<uint8_t>& signature, const std::vector<uint8_t>& mask, int offset) : signature(signature), mask(mask), offset(offset) {
+	PatternMatcher(const std::vector<uint8_t>& signature, const std::vector<uint8_t>& mask, int offset) : signature_(signature), signature_mask_(mask), offset(offset) {
 		if (signature.size() != mask.size()) {
 			std::cerr << "Error: Signature and mask must be of the same size." << std::endl;
 		}

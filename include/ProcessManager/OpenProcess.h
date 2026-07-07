@@ -5,7 +5,7 @@
 
 #include <Windows.h>
 
-class OpenProcess {
+class ProcessOpener {
 public:
 	static HandleRaii OpenProcessForWrite(ProcessInfo processId);
 	static HandleRaii OpenProcessForRead(ProcessInfo processId);

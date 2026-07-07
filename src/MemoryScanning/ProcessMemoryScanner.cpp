@@ -2,7 +2,7 @@
 
 #include <Windows.h>
 
-std::optional<uintptr_t> ProcessMemoryScanner::ScanProcessMemoryForSignature(const Handler_raii& handler, PatternMatcher mather)
+std::optional<uintptr_t> ProcessMemoryScanner::ScanProcessMemoryForSignature(const HandleRaii& handler, PatternMatcher mather)
 {
 	SIZE_T addr_scan = 0;
 	MEMORY_BASIC_INFORMATION mbi;

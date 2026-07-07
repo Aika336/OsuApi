@@ -46,7 +46,7 @@ std::optional<uintptr_t> ProvideOsuInfo::GetScoreInfo()
 	return score_info == 0 ? std::nullopt : std::optional<uintptr_t>(score_info);
 }
 
-ProvideOsuInfo::ProvideOsuInfo(Handler_raii handler, const uintptr_t& base_address) :
+ProvideOsuInfo::ProvideOsuInfo(HandleRaii handler, const uintptr_t& base_address) :
     base_address_(base_address), handler_(std::move(handler))
 {}
 

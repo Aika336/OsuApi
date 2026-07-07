@@ -11,16 +11,16 @@
 class Memory {
 public:
 	template<typename T>
-	static std::optional<T> ReadAs(const Handler_raii& handler, uintptr_t address);
+	static std::optional<T> ReadAs(const HandleRaii& handler, uintptr_t address);
 
 	static std::optional<std::vector<uint8_t>> ReadMemoryRegion(
-		const Handler_raii& handler, 
+		const HandleRaii& handler, 
 		uintptr_t address, size_t size
 	);
 };
 
 template<typename T>
-inline std::optional<T> Memory::ReadAs(const Handler_raii& handler, uintptr_t address)
+inline std::optional<T> Memory::ReadAs(const HandleRaii& handler, uintptr_t address)
 {
 	T value{};
 	SIZE_T read_bytes = 0;

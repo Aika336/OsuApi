@@ -10,7 +10,7 @@ OsuHandler::OsuHandler()
 		std::cout << "Process not found." << std::endl;
 	}
 
-	Handler_raii handler = OpenProcess::OpenProcessByIdRW(process_info.value());
+	HandleRaii handler = OpenProcess::OpenProcessByIdRW(process_info.value());
 
 	auto game_base_address = ProcessMemoryScanner::ScanProcessMemoryForSignature(handler, PatternMatcher(signature_, mask_, 32));
 	if (!game_base_address) {

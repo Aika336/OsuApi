@@ -7,7 +7,7 @@
 
 class OpenProcess {
 public:
-	static Handler_raii OpenProcessByIdW(ProcessInfo processId);
-	static Handler_raii OpenProcessByIdR(ProcessInfo processId);
-	static Handler_raii OpenProcessByIdRW(ProcessInfo processId);
+	static HandleRaii OpenProcessByIdW(ProcessInfo processId);
+	static HandleRaii OpenProcessByIdR(ProcessInfo processId);
+	static HandleRaii OpenProcessByIdRW(ProcessInfo processId);
 };

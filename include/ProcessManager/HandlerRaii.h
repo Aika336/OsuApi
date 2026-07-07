@@ -2,20 +2,20 @@
 
 #include <Windows.h>
 
-struct Handler_raii {
+struct HandleRaii {
     HANDLE hProcess = NULL;
 
-    Handler_raii() = default;
-    Handler_raii(HANDLE h) : hProcess(h) {}
+    HandleRaii() = default;
+    HandleRaii(HANDLE h) : hProcess(h) {}
 
-    Handler_raii(const Handler_raii&) = delete;
-    Handler_raii& operator=(const Handler_raii&) = delete;
+    HandleRaii(const HandleRaii&) = delete;
+    HandleRaii& operator=(const HandleRaii&) = delete;
 
-    Handler_raii(Handler_raii&& other) noexcept : hProcess(other.hProcess) {
+    HandleRaii(HandleRaii&& other) noexcept : hProcess(other.hProcess) {
         other.hProcess = NULL;
     }
 
-    Handler_raii& operator=(Handler_raii&& other) noexcept {
+    HandleRaii& operator=(HandleRaii&& other) noexcept {
         if (this != &other) {
             Close();
             hProcess = other.hProcess;
@@ -24,7 +24,7 @@ struct Handler_raii {
         return *this;
     }
 
-    ~Handler_raii() {
+    ~HandleRaii() {
         Close();
     }
 

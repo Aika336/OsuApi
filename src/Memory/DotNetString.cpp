@@ -1,7 +1,7 @@
 #include "DotNetString.h"
 #include "Memory.h"
 
-std::optional<std::wstring> DotNetString::Read(const Handler_raii& handler, uintptr_t address) {
+std::optional<std::wstring> DotNetString::Read(const HandleRaii& handler, uintptr_t address) {
     if (address == 0) {
         return std::nullopt;
     }

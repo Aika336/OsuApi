@@ -7,5 +7,5 @@
 
 class ProcessMemoryScanner {
 public:
-	static std::optional<uintptr_t> ScanProcessMemoryForSignature(const Handler_raii& handler, PatternMatcher mather);
+	static std::optional<uintptr_t> ScanProcessMemoryForSignature(const HandleRaii& handler, PatternMatcher mather);
 };

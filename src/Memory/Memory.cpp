@@ -4,7 +4,7 @@
 #include <vector>
 
 std::optional<std::vector<uint8_t>> Memory::ReadMemoryRegion(
-	const Handler_raii& handler, 
+	const HandleRaii& handler, 
 	uintptr_t address, 
 	size_t size) 
 {

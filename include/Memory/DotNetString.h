@@ -8,7 +8,7 @@
 
 class DotNetString {
 public:
-    static std::optional<std::wstring> Read(const Handler_raii& handler, uintptr_t address);
+    static std::optional<std::wstring> Read(const HandleRaii& handler, uintptr_t address);
 
 private:
     static constexpr uint32_t k_kength_offset_ = 0x8;

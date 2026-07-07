@@ -2,11 +2,13 @@
 #include "Memory.h"
 
 std::optional<std::wstring> DotNetString::Read(const HandleRaii& handler, uintptr_t address) {
+    // если переданный адресс равгяеться 0, значит поле которое требуеться прочитать еще пустое
     if (address == 0) {
         return std::nullopt;
     }
 
     auto length = Memory::ReadAs<int32_t>(handler, address + k_kength_offset_);
+    // !length не смог прочитать значения | *length <= 0, адресс прочитан но там мусор | > kMaxLength похоже на строку, но неправдоподобнной длинны
     if (!length || *length <= 0 || static_cast<uint32_t>(*length) > k_max_length_) {
         return std::nullopt;
     }

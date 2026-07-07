@@ -18,17 +18,14 @@ HandleRaii ProcessOpener::OpenProcessForWrite(ProcessInfo info)
 
 HandleRaii ProcessOpener::OpenProcessForRead(ProcessInfo info)
 {
-	HANDLE hProcess = ::OpenProcess(PROCESS_VM_READ | PROCESS_QUERY_INFORMATION, FALSE, info.processId);
-	if (hProcess == NULL) {
+	HandleRaii hProcess = ::OpenProcess(PROCESS_VM_WRITE | PROCESS_QUERY_INFORMATION, FALSE, info.processId);
+	if (!hProcess.hProcess) {
 		std::string msg = "OpenProcessForRead: Failed to open process with ID " + info.processId;
 		msg += ". Error: " + GetLastError();
 		LOG_ERROR(msg);
-		return {}; return {};
+		throw std::runtime_error(msg);
 	}
-	HandleRaii handler;
-	handler.hProcess = hProcess;
-
-	return handler;
+	return hProcess;
 }
 
 HandleRaii ProcessOpener::OpenProcessForReadWrite(ProcessInfo info)

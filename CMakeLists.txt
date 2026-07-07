@@ -44,7 +44,6 @@ add_library(Logger
     src/Logger/Logger.cpp
 )
 
-
 target_include_directories(ProcessManager PUBLIC include/ProcessManager)
 target_include_directories(MemoryScanning PUBLIC include/MemoryScanning)
 target_include_directories(Memory PUBLIC include/Memory)
@@ -54,11 +53,13 @@ target_include_directories(ProvideOsuInfo PUBLIC
     include/ProvideOsuInfo/OsuOffsets
 )
 
+foreach(target ProcessManager MemoryScanning Memory ProvideOsuInfo)
+    target_link_libraries(${target} PUBLIC Logger)
+endforeach()
+
 add_executable(OsuApi
     main.cpp
 )
-
-link_libraries(Logger)
 
 target_link_libraries(OsuApi PRIVATE ProvideOsuInfo)
 target_link_libraries(MemoryScanning PUBLIC ProcessManager)

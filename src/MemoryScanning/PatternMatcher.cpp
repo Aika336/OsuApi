@@ -41,5 +41,5 @@ std::optional<size_t> PatternMatcher::CheckForSignature(const std::vector<uint8_
 
 int PatternMatcher::getOffset() const
 {
-	return offset;
+	return offset_;
 }

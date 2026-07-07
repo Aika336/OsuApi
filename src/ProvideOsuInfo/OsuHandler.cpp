@@ -9,6 +9,7 @@ OsuHandler::OsuHandler()
 	auto process_info = ProcessProvider::GetProcessByName(L"osu!.exe");
 	if (!process_info) {
 		LOG_ERROR("Can not find a process with name osu!.exe");
+		throw std::runtime_error("Can not find a process with name osu!.exe");
 	}
 
 	HandleRaii handler = ProcessOpener::OpenProcessForReadWrite(process_info.value());
@@ -17,8 +18,10 @@ OsuHandler::OsuHandler()
 		handler, 
 		PatternMatcher(SignatureInfo::signature_, SignatureInfo::mask_, 32)
 	);
+
 	if (!game_base_address) {
 		LOG_ERROR("Failed to find the game base address.");
+		throw std::runtime_error("Failed to find the game base address.");
 	}
 
 	osu_info_ = std::make_unique<OsuInfoProvider>(std::move(handler), game_base_address.value());

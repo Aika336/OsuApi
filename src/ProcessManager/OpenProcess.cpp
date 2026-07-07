@@ -4,7 +4,7 @@
 #include <iostream>
 #include <string>
 
-HandleRaii OpenProcess::OpenProcessForWrite(ProcessInfo info)
+HandleRaii ProcessOpener::OpenProcessForWrite(ProcessInfo info)
 {
 	HANDLE hProcess = ::OpenProcess(PROCESS_VM_WRITE | PROCESS_QUERY_INFORMATION, FALSE, info.processId);
 	if (hProcess == NULL) {
@@ -19,7 +19,7 @@ HandleRaii OpenProcess::OpenProcessForWrite(ProcessInfo info)
 	return handler;
 }
 
-HandleRaii OpenProcess::OpenProcessForRead(ProcessInfo info)
+HandleRaii ProcessOpener::OpenProcessForRead(ProcessInfo info)
 {
 	HANDLE hProcess = ::OpenProcess(PROCESS_VM_READ | PROCESS_QUERY_INFORMATION, FALSE, info.processId);
 	if (hProcess == NULL) {
@@ -34,7 +34,7 @@ HandleRaii OpenProcess::OpenProcessForRead(ProcessInfo info)
 	return handler;
 }
 
-HandleRaii OpenProcess::OpenProcessForReadWrite(ProcessInfo info)
+HandleRaii ProcessOpener::OpenProcessForReadWrite(ProcessInfo info)
 {
 	HANDLE hProcess = ::OpenProcess(PROCESS_VM_READ | PROCESS_VM_WRITE | PROCESS_QUERY_INFORMATION, FALSE, info.processId);
 	if (hProcess == NULL) {

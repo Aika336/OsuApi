@@ -7,7 +7,7 @@
 
 class OpenProcess {
 public:
-	static HandleRaii OpenProcessByIdW(ProcessInfo processId);
-	static HandleRaii OpenProcessByIdR(ProcessInfo processId);
-	static HandleRaii OpenProcessByIdRW(ProcessInfo processId);
+	static HandleRaii OpenProcessForWrite(ProcessInfo processId);
+	static HandleRaii OpenProcessForRead(ProcessInfo processId);
+	static HandleRaii OpenProcessForReadWrite(ProcessInfo processId);
 };

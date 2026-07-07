@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-HandleRaii OpenProcess::OpenProcessByIdW(ProcessInfo info)
+HandleRaii OpenProcess::OpenProcessForWrite(ProcessInfo info)
 {
 	HANDLE hProcess = ::OpenProcess(PROCESS_VM_WRITE | PROCESS_QUERY_INFORMATION, FALSE, info.processId);
 	if (hProcess == NULL) {
@@ -15,7 +15,7 @@ HandleRaii OpenProcess::OpenProcessByIdW(ProcessInfo info)
 	return handler;
 }
 
-HandleRaii OpenProcess::OpenProcessByIdR(ProcessInfo info)
+HandleRaii OpenProcess::OpenProcessForRead(ProcessInfo info)
 {
 	HANDLE hProcess = ::OpenProcess(PROCESS_VM_READ | PROCESS_QUERY_INFORMATION, FALSE, info.processId);
 	if (hProcess == NULL) {
@@ -28,7 +28,7 @@ HandleRaii OpenProcess::OpenProcessByIdR(ProcessInfo info)
 	return handler;
 }
 
-HandleRaii OpenProcess::OpenProcessByIdRW(ProcessInfo info)
+HandleRaii OpenProcess::OpenProcessForReadWrite(ProcessInfo info)
 {
 	HANDLE hProcess = ::OpenProcess(PROCESS_VM_READ | PROCESS_VM_WRITE | PROCESS_QUERY_INFORMATION, FALSE, info.processId);
 	if (hProcess == NULL) {

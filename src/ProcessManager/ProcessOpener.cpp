@@ -6,7 +6,7 @@
 
 HandleRaii ProcessOpener::OpenProcessForWrite(ProcessInfo info)
 {
-	HandleRaii hProcess{ ::OpenProcess(PROCESS_VM_WRITE | PROCESS_QUERY_INFORMATION, FALSE, info.processId) };
+	HandleRaii hProcess {::OpenProcess(PROCESS_VM_WRITE | PROCESS_QUERY_INFORMATION, FALSE, info.processId)};
 	if (!hProcess.hProcess) {
 		std::string msg = "OpenProcessForWrite: Failed to open process with ID " + info.processId;
 		msg += ". Error: " + GetLastError();
@@ -18,7 +18,7 @@ HandleRaii ProcessOpener::OpenProcessForWrite(ProcessInfo info)
 
 HandleRaii ProcessOpener::OpenProcessForRead(ProcessInfo info)
 {
-	HandleRaii hProcess = ::OpenProcess(PROCESS_VM_READ | PROCESS_QUERY_INFORMATION, FALSE, info.processId);
+	HandleRaii hProcess = { ::OpenProcess(PROCESS_VM_READ | PROCESS_QUERY_INFORMATION, FALSE, info.processId) };
 	if (!hProcess.hProcess) {
 		std::string msg = "OpenProcessForRead: Failed to open process with ID " + info.processId;
 		msg += ". Error: " + GetLastError();
@@ -30,7 +30,7 @@ HandleRaii ProcessOpener::OpenProcessForRead(ProcessInfo info)
 
 HandleRaii ProcessOpener::OpenProcessForReadWrite(ProcessInfo info)
 {
-	HandleRaii hProcess = ::OpenProcess(PROCESS_VM_READ | PROCESS_VM_WRITE | PROCESS_QUERY_INFORMATION, FALSE, info.processId);
+	HandleRaii hProcess = { ::OpenProcess(PROCESS_VM_WRITE | PROCESS_VM_READ | PROCESS_QUERY_INFORMATION, FALSE, info.processId) };
 	if (!hProcess.hProcess) {
 		std::string msg = "OpenProcessForReadWrite: Failed to open process with ID " + info.processId;
 		msg += ". Error: " + GetLastError();

@@ -47,3 +47,5 @@ public:
         PSIZE_T ReturnLength
     );
 };
+
+static NtDll NtDLL;

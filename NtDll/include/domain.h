@@ -9,6 +9,7 @@
 #include <minwindef.h>
 #include <string>
 #include <bcrypt.h>
+#include <stdexcept>
 
 namespace name_dll {
     static constexpr std::string_view NTDLL = "ntdll.dll";
@@ -27,7 +28,7 @@ std::wstring UnicodeStringToWString(const UNICODE_STRING& uStr);
 
 template<typename T>
 T LoadFunctionFromModule(HMODULE hModuel, std::string_view function_name) {
-    T func = reinterpret_cast<T>(GetProcAddress(hModuel, function_name));
+    T func = reinterpret_cast<T>(GetProcAddress(hModuel, function_name.data()));
     if (!func) {
         LOG_ERROR("Incorrect load function: " + std::string(function_name));
         throw std::runtime_error("Incorrect load function: " + std::string(function_name));

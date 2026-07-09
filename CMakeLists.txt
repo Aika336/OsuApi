@@ -3,6 +3,14 @@ project(OsuApi CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 
+add_library(NtDll STATIC
+    NtDll/include/ntdll.h
+    NtDll/include/domain.h
+    #
+    NtDll/src/ntdll.cpp
+    NtDll/src/domain.cpp
+)
+
 add_library(ProcessManager STATIC
     include/ProcessManager/ProcessProvider.h
     include/ProcessManager/ProcessInfo.h
@@ -59,6 +67,9 @@ target_include_directories(Logger PUBLIC
 target_include_directories(ProvideOsuInfo PUBLIC 
     include/ProvideOsuInfo
     include/ProvideOsuInfo/OsuOffsets
+)
+target_include_directories(NtDll PUBLIC
+     NtDll/include
 )
 
 foreach(target ProcessManager MemoryScanning Memory ProvideOsuInfo)

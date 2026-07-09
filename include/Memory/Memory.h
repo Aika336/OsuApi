@@ -4,7 +4,6 @@
 #include "Logger.h"
 #include "ntdll.h"
 
-#include <Windows.h>
 #include <vector>
 #include <iostream>
 #include <optional>
@@ -28,9 +27,20 @@ inline std::optional<T> Memory::ReadAs(const HandleRaii& handler, uintptr_t addr
 	T value{};
 	SIZE_T read_bytes = 0;
 
-	if (!ReadProcessMemory(handler.hProcess, reinterpret_cast<LPVOID>(address), &value, sizeof(T), &read_bytes) 
-		|| read_bytes != sizeof(T)) {
+	NTSTATUS status = ntdll_.NtReadProcessMemory(
+		handler.hProcess,
+		reinterpret_cast<LPVOID>(address),
+		&value,
+		sizeof(T),
+		&read_bytes
+	);
+
+	if (!NT_SUCCESS(status)) {
 		LOG_ERROR("Failed to read memory at address: " + std::format("0x{:x}", address));
+		return std::nullopt;
+	}
+	else if (sizeof(T) != read_bytes) {
+		LOG_ERROR("Read bytes != expected bytes: " + std::format("0x{:x}", address));
 		return std::nullopt;
 	}
 

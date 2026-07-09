@@ -41,7 +41,7 @@ std::optional<uintptr_t> OsuInfoProvider::GetScoreInfo()
     }
 
     auto score_info = Memory::ReadAs<uintptr_t>(handle_, *player_score + 0x8);
-    if (!player_score) {
+    if (!score_info) {
         return std::nullopt;
     }
 

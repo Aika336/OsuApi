@@ -54,3 +54,10 @@ NTSTATUS NtDll::NtReadProcessMemory(HANDLE ProcessHandle, PVOID BaseAddress, PVO
 	LoadNtReadProcessMemory();
 	return NtReadProcessMemory_(ProcessHandle, BaseAddress, Buffer, NumberOfBytesToRead, NumberOfBytesRead);
 }
+
+NTSTATUS NtDll::NtQueryVirtualMemory(HANDLE ProcessHandle, PVOID BaseAddress, MEMORY_INFORMATION_CLASS MemoryInformationClass
+	, PVOID MemoryInformation, SIZE_T MemoryInformationLength, PSIZE_T ReturnLength)
+{
+	LoadNtQueryVirtualMemory();
+	return NtQueryVirtualMemory_(ProcessHandle, BaseAddress, MemoryInformationClass, MemoryInformation, MemoryInformationLength, ReturnLength);
+}

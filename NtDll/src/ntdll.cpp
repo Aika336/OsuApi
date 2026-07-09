@@ -9,7 +9,7 @@ NtDll::NtDll() {
 
 void NtDll::LoadNtQuerySystemInformation()
 {
-	if (!NtQuerySystemInformation_) {
+	if (NtQuerySystemInformation_) {
 		return;
 	}
 	NtQuerySystemInformation_ = LoadFunctionFromModule<pNtQuerySystemInformation>(ntdll_, nt_functions_name::NTQSI);
@@ -17,7 +17,7 @@ void NtDll::LoadNtQuerySystemInformation()
 
 void NtDll::LoadNtOpenProcess()
 {
-	if (!NtOpenProcess_) {
+	if (NtOpenProcess_) {
 		return;
 	}
 	NtOpenProcess_ = LoadFunctionFromModule<pNtOpenProcess>(ntdll_, nt_functions_name::OPEN_PROCESS);
@@ -25,7 +25,7 @@ void NtDll::LoadNtOpenProcess()
 
 void NtDll::LoadNtReadProcessMemory()
 {
-	if (!NtReadProcessMemory_) {
+	if (NtReadProcessMemory_) {
 		return;
 	}
 	NtReadProcessMemory_ = LoadFunctionFromModule<pNtReadProcessMemory>(ntdll_, nt_functions_name::READ_MEMORY);

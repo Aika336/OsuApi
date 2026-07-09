@@ -7,6 +7,14 @@ NtDll::NtDll() {
 	ntdll_ = LoadModule(nt_functions_name::NTDLL.data());
 }
 
+NtDll::~NtDll()
+{
+	if (ntdll_) {
+		FreeLibrary(ntdll_);
+		ntdll_ = nullptr;
+	}
+}
+
 void NtDll::LoadNtQuerySystemInformation()
 {
 	if (NtQuerySystemInformation_) {

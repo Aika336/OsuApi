@@ -18,6 +18,7 @@ class NtDll {
     void LoadNtQueryVirtualMemory();
 public:
     NtDll();
+    ~NtDll();
     NTSTATUS NtQuerySystemInformation(
         SYSTEM_INFORMATION_CLASS SystemInformationClass,
         PVOID SystemInformation,

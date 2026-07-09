@@ -9,10 +9,7 @@ NtDll::NtDll() {
 
 NtDll::~NtDll()
 {
-	if (ntdll_) {
-		FreeLibrary(ntdll_);
-		ntdll_ = nullptr;
-	}
+	ntdll_ = nullptr;
 }
 
 void NtDll::LoadNtQuerySystemInformation()

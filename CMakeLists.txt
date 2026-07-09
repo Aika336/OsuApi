@@ -85,6 +85,7 @@ target_link_libraries(OsuApi PRIVATE
 )
 target_link_libraries(MemoryScanning PUBLIC 
     ProcessManager
+    Memory
 )
 target_link_libraries(ProvideOsuInfo PUBLIC
     Memory 

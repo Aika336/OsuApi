@@ -7,7 +7,9 @@
 
 class NtDll {
     HMODULE ntdll_{ 0 };
-
+    pNtQuerySystemInformation NtQuerySystemInformation{0};
+    pNtOpenProcess NtOpenProcess{0};
+    pNtReadProcessMemory NtReadProcessMemory{0};
 
 	void LoadNtQuerySystemInformation();
 	void LoadNtOpenProcess();

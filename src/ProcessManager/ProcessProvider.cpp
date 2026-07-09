@@ -18,6 +18,7 @@ std::optional<ProcessInfo> ProcessProvider::FindProcessByName(const std::wstring
 		}
 	}
 
+	LOG_ERROR("ProvideProcesses::FindProcessByName: No find process by name " + std::string(name.begin(), name.end()));
 	throw std::runtime_error("ProvideProcesses::FindProcessByName: No find process by name " + std::string(name.begin(), name.end()));
 }
 

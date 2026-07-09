@@ -11,7 +11,7 @@
 #include <bcrypt.h>
 #include <stdexcept>
 
-namespace ntfunctions_name {
+namespace nt_functions_name {
     static constexpr std::string_view NTDLL = "ntdll.dll";
     static constexpr std::string_view ADJUST_PRIVILEGE = "NtAdjustPrivilegesToken";
     static constexpr std::string_view NTQSI = "NtQuerySystemInformation";

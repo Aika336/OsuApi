@@ -23,6 +23,10 @@ namespace nt_functions_name {
     static constexpr std::string_view QUERY_MEMORY = "NtQueryVirtualMemory";
 }
 
+typedef enum _MEMORY_INFORMATION_CLASS {
+    MemoryBasicInformation
+} MEMORY_INFORMATION_CLASS;
+
 std::wstring UnicodeStringToWString(const UNICODE_STRING& uStr);
 
 inline HMODULE LoadModule(std::string_view module_name)
@@ -72,4 +76,13 @@ typedef NTSTATUS(*pNtOpenProcess)(
     ACCESS_MASK DesiredAccess,
     POBJECT_ATTRIBUTES ObjectAttributes,
     CLIENT_ID* Client
+    );
+
+typedef NTSTATUS(*pNtQueryVirtualMemory) (
+    HANDLE ProcessHandle,
+    PVOID BaseAddress,
+    MEMORY_INFORMATION_CLASS MemoryInformationClass,
+    PVOID MemoryInformation,
+    SIZE_T MemoryInformationLength,
+    PSIZE_T ReturnLength
     );

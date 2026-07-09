@@ -10,10 +10,12 @@ class NtDll {
     pNtQuerySystemInformation NtQuerySystemInformation_{0};
     pNtOpenProcess NtOpenProcess_{0};
     pNtReadProcessMemory NtReadProcessMemory_{0};
+    pNtQueryVirtualMemory NtQueryVirtualMemory_{0};
 
 	void LoadNtQuerySystemInformation();
 	void LoadNtOpenProcess();
 	void LoadNtReadProcessMemory();
+    void LoadNtQueryVirtualMemory();
 public:
     NtDll();
     NTSTATUS NtQuerySystemInformation(
@@ -34,5 +36,13 @@ public:
         PVOID Buffer,
         SIZE_T NumberOfBytesToRead,
         PSIZE_T NumberOfBytesRead
+    );
+    NTSTATUS NtQueryVirtualMemory(
+        HANDLE ProcessHandle,
+        PVOID BaseAddress,
+        MEMORY_INFORMATION_CLASS MemoryInformationClass,
+        PVOID MemoryInformation,
+        SIZE_T MemoryInformationLength,
+        PSIZE_T ReturnLength
     );
 };

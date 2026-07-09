@@ -31,6 +31,14 @@ void NtDll::LoadNtReadProcessMemory()
 	NtReadProcessMemory_ = LoadFunctionFromModule<pNtReadProcessMemory>(ntdll_, nt_functions_name::READ_MEMORY);
 }
 
+void NtDll::LoadNtQueryVirtualMemory()
+{
+	if (NtQueryVirtualMemory_) {
+		return;
+	}
+	NtQueryVirtualMemory_ = LoadFunctionFromModule<pNtQueryVirtualMemory>(ntdll_, nt_functions_name::QUERY_MEMORY);
+}
+
 NTSTATUS NtDll::NtQuerySystemInformation(SYSTEM_INFORMATION_CLASS SystemInformationClass, PVOID SystemInformation, ULONG SystemInformationLength, PULONG ReturnLength) {
 	LoadNtQuerySystemInformation();
 	return NtQuerySystemInformation_(SystemInformationClass, SystemInformation, SystemInformationLength, ReturnLength);

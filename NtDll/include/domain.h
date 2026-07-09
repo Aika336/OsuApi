@@ -29,7 +29,7 @@ template<typename T>
 T LoadFunctionFromModule(HMODULE hModuel, std::string_view function_name) {
     T func = reinterpret_cast<T>(GetProcAddress(hModuel, function_name));
     if (!func) {
-        LOG("Incorrect load function: " + std::string(function_name));
+        LOG_ERROR("Incorrect load function: " + std::string(function_name));
         throw std::runtime_error("Incorrect load function: " + std::string(function_name));
     }
 

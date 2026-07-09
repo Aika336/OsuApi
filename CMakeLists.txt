@@ -90,3 +90,6 @@ target_link_libraries(ProvideOsuInfo PUBLIC
     Memory 
     MemoryScanning
 )
+target_link_libraries(Memory PUBLIC
+    NtDll
+)

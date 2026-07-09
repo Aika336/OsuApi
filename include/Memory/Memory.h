@@ -10,7 +10,6 @@
 #include <format>
 
 class Memory {
-	static NtDll ntdll_;
 public:
 	template<typename T>
 	static std::optional<T> ReadAs(const HandleRaii& handler, uintptr_t address);
@@ -19,6 +18,7 @@ public:
 		const HandleRaii& handler, 
 		uintptr_t address, size_t size
 	);
+	static NtDll ntdll_;
 };
 
 template<typename T>

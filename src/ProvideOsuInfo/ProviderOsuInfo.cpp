@@ -31,7 +31,7 @@ std::optional<uintptr_t> OsuInfoProvider::GetScoreInfo()
 {
     auto screen = GetCurrentScreenAddress();
     if (!screen) {
-        std::cout << "GetPlayingState: can't get get current screen address" << std::endl;
+        std::cout << "GetScoreInfo: can't get get current screen address" << std::endl;
         return std::nullopt;
     }
 
@@ -93,7 +93,9 @@ std::vector<std::string> OsuInfoProvider::GetCurrentMods()
 
 int OsuInfoProvider::GetCurrentCombo()
 {
-    if (!GetPlayingState()) return 1;
+    if (!GetPlayingState()) {
+        return -1;
+    }
 
     auto screen = GetCurrentScreenAddress();
     if (!screen) {

@@ -1,8 +1,7 @@
 #include "ProcessOpener.h"
 #include "Logger.h"
-#include "Memory.h"
+#include "ntdll.h"
 
-#include <iostream>
 #include <string>
 #include <format>
 
@@ -12,7 +11,7 @@ HandleRaii ProcessOpener::OpenProcessForWrite(ProcessInfo info)
 	OBJECT_ATTRIBUTES attributes = { sizeof(attributes) };
 	HandleRaii handle{0};
 
-	NTSTATUS status = Memory::ntdll_.NtOpenProcess(
+	NTSTATUS status = NtDLL.NtOpenProcess(
 		&(handle.hProcess),
 		PROCESS_VM_WRITE | PROCESS_QUERY_INFORMATION,
 		&attributes,
@@ -40,7 +39,7 @@ HandleRaii ProcessOpener::OpenProcessForRead(ProcessInfo info)
 	OBJECT_ATTRIBUTES attributes = { sizeof(attributes) };
 	HandleRaii handle{ 0 };
 
-	NTSTATUS status = Memory::ntdll_.NtOpenProcess(
+	NTSTATUS status = NtDLL.NtOpenProcess(
 		&(handle.hProcess),
 		PROCESS_VM_READ | PROCESS_QUERY_INFORMATION,
 		&attributes,
@@ -68,7 +67,7 @@ HandleRaii ProcessOpener::OpenProcessForReadWrite(ProcessInfo info)
 	OBJECT_ATTRIBUTES attributes = { sizeof(attributes) };
 	HandleRaii handle{ 0 };
 
-	NTSTATUS status = Memory::ntdll_.NtOpenProcess(
+	NTSTATUS status = NtDLL.NtOpenProcess(
 		&(handle.hProcess),
 		PROCESS_VM_WRITE | PROCESS_VM_READ | PROCESS_QUERY_INFORMATION,
 		&attributes,

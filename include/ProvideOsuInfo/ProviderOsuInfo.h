@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../ProcessManager/HandleRaii.h"
+#include "HandleRaii.h"
 
 #include <Windows.h>
 #include <vector>
@@ -8,7 +8,7 @@
 #include <optional>
 
 class OsuInfoProvider {
-	uintptr_t base_address_;
+	uintptr_t base_address_; 
 	HandleRaii handle_;
 
 	std::optional<uintptr_t> GetCurrentScreenAddress();

@@ -18,7 +18,6 @@ public:
 		const HandleRaii& handler, 
 		uintptr_t address, size_t size
 	);
-	static NtDll ntdll_;
 };
 
 template<typename T>
@@ -27,7 +26,7 @@ inline std::optional<T> Memory::ReadAs(const HandleRaii& handler, uintptr_t addr
 	T value{};
 	SIZE_T read_bytes = 0;
 
-	NTSTATUS status = ntdll_.NtReadProcessMemory(
+	NTSTATUS status = NtDLL.NtReadProcessMemory(
 		handler.hProcess,
 		reinterpret_cast<LPVOID>(address),
 		&value,

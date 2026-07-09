@@ -1,9 +1,6 @@
 #include "ProcessProvider.h"
 #include "Logger.h"
-#include "Memory.h"
-
-#include <TlHelp32.h>
-#include <iostream>
+#include "ntdll.h"
 
 std::optional<ProcessInfo> ProcessProvider::FindProcessByName(const std::wstring& name)
 {
@@ -26,7 +23,7 @@ std::vector<ProcessInfo> ProcessProvider::GetAllProcesses() {
 	std::vector<ProcessInfo> processes;
 	
 	ULONG systeminfo_len = 0;
-	NTSTATUS status = Memory::ntdll_.NtQuerySystemInformation(
+	NTSTATUS status = NtDLL.NtQuerySystemInformation(
 		SystemProcessInformation,
 		nullptr,
 		systeminfo_len,
@@ -40,7 +37,7 @@ std::vector<ProcessInfo> ProcessProvider::GetAllProcesses() {
 	}
 
 	std::vector<BYTE> buffer(systeminfo_len);
-	status = Memory::ntdll_.NtQuerySystemInformation(
+	status = NtDLL.NtQuerySystemInformation(
 		SystemProcessInformation,
 		buffer.data(),
 		systeminfo_len,

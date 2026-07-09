@@ -3,8 +3,6 @@
 
 #include <vector>
 
-NtDll Memory::ntdll_;
-
 std::optional<std::vector<uint8_t>> Memory::ReadMemoryRegion(
 	const HandleRaii& handle, 
 	uintptr_t address, 
@@ -13,7 +11,7 @@ std::optional<std::vector<uint8_t>> Memory::ReadMemoryRegion(
 	std::vector<uint8_t> buffer(size);
 	SIZE_T read_bytes = 0;
 
-	NTSTATUS status = ntdll_.NtReadProcessMemory(
+	NTSTATUS status = NtDLL.NtReadProcessMemory(
 		handle.hProcess,
 		reinterpret_cast<LPVOID>(address),
 		buffer.data(),

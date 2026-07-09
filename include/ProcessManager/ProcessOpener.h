@@ -3,8 +3,6 @@
 #include "HandleRaii.h"
 #include "ProcessInfo.h"
 
-#include <Windows.h>
-
 class ProcessOpener {
 public:
 	static HandleRaii OpenProcessForWrite(ProcessInfo processId);

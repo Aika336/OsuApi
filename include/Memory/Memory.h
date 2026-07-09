@@ -2,6 +2,7 @@
 
 #include "../ProcessManager/HandleRaii.h"
 #include "Logger.h"
+#include "ntdll.h"
 
 #include <Windows.h>
 #include <vector>
@@ -10,6 +11,7 @@
 #include <format>
 
 class Memory {
+	static NtDll ntdll_;
 public:
 	template<typename T>
 	static std::optional<T> ReadAs(const HandleRaii& handler, uintptr_t address);

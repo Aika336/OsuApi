@@ -67,4 +67,9 @@ namespace ntdll {
 		LoadNtQueryVirtualMemory();
 		return NtQueryVirtualMemory_(ProcessHandle, BaseAddress, MemoryInformationClass, MemoryInformation, MemoryInformationLength, ReturnLength);
 	}
+	NtDll& GetNtDll()
+	{
+		static NtDll instanec;
+		return instanec;
+	}
 }

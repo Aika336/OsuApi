@@ -50,7 +50,5 @@ namespace ntdll {
         );
     };
 
-    NtDll& GetNtDll() {
-
-    }
+    NtDll& GetNtDll();
 }

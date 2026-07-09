@@ -94,3 +94,6 @@ target_link_libraries(ProvideOsuInfo PUBLIC
 target_link_libraries(Memory PUBLIC
     NtDll
 )
+target_link_libraries(ProcessManager PUBLIC
+    Memory
+)

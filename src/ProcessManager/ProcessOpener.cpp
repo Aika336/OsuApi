@@ -11,7 +11,7 @@ HandleRaii ProcessOpener::OpenProcessForWrite(ProcessInfo info)
 	OBJECT_ATTRIBUTES attributes = { sizeof(attributes) };
 	HandleRaii handle{0};
 
-	NTSTATUS status = NtDLL.NtOpenProcess(
+	NTSTATUS status = ntdll::GetNtDll().NtOpenProcess(
 		&(handle.hProcess),
 		PROCESS_VM_WRITE | PROCESS_QUERY_INFORMATION,
 		&attributes,
@@ -39,7 +39,7 @@ HandleRaii ProcessOpener::OpenProcessForRead(ProcessInfo info)
 	OBJECT_ATTRIBUTES attributes = { sizeof(attributes) };
 	HandleRaii handle{ 0 };
 
-	NTSTATUS status = NtDLL.NtOpenProcess(
+	NTSTATUS status = ntdll::GetNtDll().NtOpenProcess(
 		&(handle.hProcess),
 		PROCESS_VM_READ | PROCESS_QUERY_INFORMATION,
 		&attributes,
@@ -67,7 +67,7 @@ HandleRaii ProcessOpener::OpenProcessForReadWrite(ProcessInfo info)
 	OBJECT_ATTRIBUTES attributes = { sizeof(attributes) };
 	HandleRaii handle{ 0 };
 
-	NTSTATUS status = NtDLL.NtOpenProcess(
+	NTSTATUS status = ntdll::GetNtDll().NtOpenProcess(
 		&(handle.hProcess),
 		PROCESS_VM_WRITE | PROCESS_VM_READ | PROCESS_QUERY_INFORMATION,
 		&attributes,

@@ -26,7 +26,7 @@ inline std::optional<T> Memory::ReadAs(const HandleRaii& handler, uintptr_t addr
 	T value{};
 	SIZE_T read_bytes = 0;
 
-	NTSTATUS status = NtDLL.NtReadProcessMemory(
+	NTSTATUS status = ntdll::GetNtDll().NtReadProcessMemory(
 		handler.hProcess,
 		reinterpret_cast<LPVOID>(address),
 		&value,

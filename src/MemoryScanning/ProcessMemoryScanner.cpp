@@ -8,7 +8,7 @@ std::optional<uintptr_t> ProcessMemoryScanner::ScanProcessMemoryForSignature(con
     SIZE_T return_length = 0;
 
 
-	while (NT_SUCCESS(NtDLL.NtQueryVirtualMemory(
+	while (NT_SUCCESS(ntdll::GetNtDll().NtQueryVirtualMemory(
         handler.hProcess,
         reinterpret_cast<LPVOID>(addr_scan),
         MemoryBasicInformation,
@@ -25,7 +25,7 @@ std::optional<uintptr_t> ProcessMemoryScanner::ScanProcessMemoryForSignature(con
             std::vector<uint8_t> regionBytes(mbi.RegionSize);
             SIZE_T bytes_read = 0;
 
-            NTSTATUS status = NtDLL.NtReadProcessMemory(handler.hProcess, mbi.BaseAddress, regionBytes.data(), mbi.RegionSize, &bytes_read);
+            NTSTATUS status = ntdll::GetNtDll().NtReadProcessMemory(handler.hProcess, mbi.BaseAddress, regionBytes.data(), mbi.RegionSize, &bytes_read);
 
             if (NT_SUCCESS(status) && bytes_read > 0) {
                 if (auto offset = mather.CheckForSignature(regionBytes)) {

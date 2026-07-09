@@ -11,7 +11,7 @@ std::optional<std::vector<uint8_t>> Memory::ReadMemoryRegion(
 	std::vector<uint8_t> buffer(size);
 	SIZE_T read_bytes = 0;
 
-	NTSTATUS status = NtDLL.NtReadProcessMemory(
+	NTSTATUS status = ntdll::GetNtDll().NtReadProcessMemory(
 		handle.hProcess,
 		reinterpret_cast<LPVOID>(address),
 		buffer.data(),

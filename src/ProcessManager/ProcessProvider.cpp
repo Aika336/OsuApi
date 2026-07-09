@@ -23,7 +23,7 @@ std::vector<ProcessInfo> ProcessProvider::GetAllProcesses() {
 	std::vector<ProcessInfo> processes;
 	
 	ULONG systeminfo_len = 0;
-	NTSTATUS status = NtDLL.NtQuerySystemInformation(
+	NTSTATUS status = ntdll::GetNtDll().NtQuerySystemInformation(
 		SystemProcessInformation,
 		nullptr,
 		systeminfo_len,
@@ -37,7 +37,7 @@ std::vector<ProcessInfo> ProcessProvider::GetAllProcesses() {
 	}
 
 	std::vector<BYTE> buffer(systeminfo_len);
-	status = NtDLL.NtQuerySystemInformation(
+	status = ntdll::GetNtDll().NtQuerySystemInformation(
 		SystemProcessInformation,
 		buffer.data(),
 		systeminfo_len,

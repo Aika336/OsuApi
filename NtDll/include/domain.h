@@ -36,3 +36,25 @@ T LoadFunctionFromModule(HMODULE hModuel, std::string_view function_name) {
 
     return func;
 }
+
+typedef NTSTATUS(*pNtQuerySystemInformation)(
+    SYSTEM_INFORMATION_CLASS SystemInformationClass,
+    PVOID SystemInformation,
+    ULONG SystemInformationLength,
+    PULONG ReturnLength
+    );
+
+typedef NTSTATUS(*pNtReadProcessMemory) (
+    HANDLE ProcessHandle,
+    PVOID BaseAddress,
+    PVOID Buffer,
+    SIZE_T NumberOfBytesToRead,
+    PSIZE_T NumberOfBytesRead
+    );
+
+typedef NTSTATUS(*pNtOpenProcess)(
+    PHANDLE hProcess,
+    ACCESS_MASK DesiredAccess,
+    POBJECT_ATTRIBUTES ObjectAttributes,
+    CLIENT_ID* Client
+    );

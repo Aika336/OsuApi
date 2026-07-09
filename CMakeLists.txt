@@ -72,7 +72,7 @@ target_include_directories(NtDll PUBLIC
      NtDll/include
 )
 
-foreach(target ProcessManager MemoryScanning Memory ProvideOsuInfo)
+foreach(target ProcessManager MemoryScanning Memory ProvideOsuInfo NtDll)
     target_link_libraries(${target} PUBLIC Logger)
 endforeach()
 

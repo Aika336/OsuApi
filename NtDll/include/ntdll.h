@@ -15,6 +15,7 @@ class NtDll {
 	void LoadNtOpenProcess();
 	void LoadNtReadProcessMemory();
 public:
+    NtDll();
     NTSTATUS NtQuerySystemInformation(
         SYSTEM_INFORMATION_CLASS SystemInformationClass,
         PVOID SystemInformation,

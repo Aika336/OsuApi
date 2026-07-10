@@ -84,11 +84,12 @@ target_link_libraries(OsuApi PRIVATE
     ProvideOsuInfo
 )
 target_link_libraries(MemoryScanning PUBLIC 
-    Memory
+    NtDll
 )
 target_link_libraries(ProvideOsuInfo PUBLIC
     MemoryScanning
     ProcessManager
+    Memory
 )
 target_link_libraries(Memory PUBLIC
     NtDll

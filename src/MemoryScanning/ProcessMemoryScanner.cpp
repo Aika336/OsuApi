@@ -1,5 +1,5 @@
 #include "ProcessMemoryScanner.h"
-#include "Memory.h"
+#include "ntdll.h"
 
 std::optional<uintptr_t> ProcessMemoryScanner::ScanProcessMemoryForSignature(const HandleRaii& handler, PatternMatcher mather)
 {

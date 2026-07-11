@@ -55,20 +55,25 @@ OsuInfoProvider::OsuInfoProvider(HandleRaii handle, const uintptr_t& base_addres
 std::vector<std::string> OsuInfoProvider::GetCurrentMods()
 {
 
-    std::vector<std::string> mods;
+    std::vector<std::string> mods{"NM"};
     auto score_info = GetScoreInfo();
-    if (!score_info || !GetPlayingState())
+    if (!score_info || !GetPlayingState()) {
         return mods;
+    }
 
     auto string_address = Memory::ReadAs<uintptr_t>(handle_, score_info.value() + OsuOffsets::ScoreInfo_ModsJson);
-    if (!string_address)
+    if (!string_address) {
         return mods;
+    }
 
     std::wstring mods_json = DotNetString::Read(handle_, *string_address).value_or(L"");
 
-    if (mods_json.empty()) return mods;
+    if (mods_json.empty()) {
+        return mods;
+    }
 
     const std::wstring keys[] = { L"\"acronym\":\"", L"\"Acronym\":\"" };
+    mods.pop_back();
 
     for (const std::wstring& key : keys) {
         size_t pos = 0;

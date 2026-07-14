@@ -21,6 +21,7 @@ std::optional<uintptr_t> OsuInfoProvider::GetCurrentScreenAddress()
 
 
     if (count <= 0 || items == 0 || !screen_stack || !stack || !count || !items) {
+        LOG_ERROR("Can't get get a current screen address");
         return std::nullopt;
     }
 
@@ -31,7 +32,6 @@ std::optional<uintptr_t> OsuInfoProvider::GetScoreInfo()
 {
     auto screen = GetCurrentScreenAddress();
     if (!screen) {
-        std::cout << "GetScoreInfo: can't get get current screen address" << std::endl;
         return std::nullopt;
     }
 
@@ -104,7 +104,6 @@ int OsuInfoProvider::GetCurrentCombo()
 
     auto screen = GetCurrentScreenAddress();
     if (!screen) {
-        std::cout << "GetPlayingState: can't get get current screen address" << std::endl;
         return -1;
     }
 
@@ -133,7 +132,6 @@ bool OsuInfoProvider::GetPlayingState()
 {
     auto screen = GetCurrentScreenAddress();
     if (!screen) {
-        std::cout << "GetPlayingState: can't get get current screen address" << std::endl;
         return false;
     }
 

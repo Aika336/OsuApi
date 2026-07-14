@@ -18,7 +18,7 @@ std::wstring UnicodeStringToWString(const UNICODE_STRING& uStr)
 HMODULE LoadModule(std::string_view module_name)
 {
     if (module_name.empty()) {
-        LOG("LoadModule: empty string module name");
+        LOG("Empty string module name");
         return 0;
     }
 

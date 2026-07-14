@@ -7,7 +7,6 @@ std::optional<uintptr_t> ProcessMemoryScanner::ScanProcessMemoryForSignature(con
 	MEMORY_BASIC_INFORMATION mbi;
     SIZE_T return_length = 0;
 
-
 	while (NT_SUCCESS(ntdll::GetNtDll().NtQueryVirtualMemory(
         handler.hProcess,
         reinterpret_cast<LPVOID>(addr_scan),

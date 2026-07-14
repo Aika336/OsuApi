@@ -69,7 +69,7 @@ namespace ntdll {
 	}
 	NtDll& GetNtDll()
 	{
-		static NtDll instanec;
-		return instanec;
+		static NtDll instance;
+		return instance;
 	}
 }

@@ -8,9 +8,9 @@
 */
 
 namespace OsuOffsets {
-    inline constexpr uint32_t OsuGame_osuLogo = 1584;
-    inline constexpr uint32_t OsuGame_ScreenStack = 1544;
-    inline constexpr uint32_t OsuGame_frameworkConfig = 1480;
+    inline constexpr uint32_t OsuGame_osuLogo = 1592;
+    inline constexpr uint32_t OsuGame_ScreenStack = 1552;
+    inline constexpr uint32_t OsuGame_frameworkConfig = 1488;
     inline constexpr uint32_t OsuGame_channelManager = 1320;
     inline constexpr uint32_t OsuGame_chatOverlay = 1312;
 
@@ -47,7 +47,7 @@ namespace OsuOffsets {
     inline constexpr uint32_t ExternalLinkOpener_api = 536;
 
     inline constexpr uint32_t APIAccess_game = 784;
-    inline constexpr uint32_t APIAccess_localUserState = 864;
+    inline constexpr uint32_t APIAccess_localUserState = 872;
 
     inline constexpr uint32_t OsuGameDesktop_AvailableMods = 1128;
     inline constexpr uint32_t OsuGameDesktop_SelectedMods = 1120;

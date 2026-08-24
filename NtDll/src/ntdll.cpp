@@ -1,0 +1,75 @@
+#include "ntdll.h"
+#include "domain.h"
+
+#include <Windows.h>
+
+namespace ntdll {
+	NtDll::NtDll() {
+		ntdll_ = LoadModule(nt_functions_name::NTDLL.data());
+	}
+
+	NtDll::~NtDll()
+	{
+		ntdll_ = nullptr;
+	}
+
+	void NtDll::LoadNtQuerySystemInformation()
+	{
+		if (NtQuerySystemInformation_) {
+			return;
+		}
+		NtQuerySystemInformation_ = LoadFunctionFromModule<pNtQuerySystemInformation>(ntdll_, nt_functions_name::NTQSI);
+	}
+
+	void NtDll::LoadNtOpenProcess()
+	{
+		if (NtOpenProcess_) {
+			return;
+		}
+		NtOpenProcess_ = LoadFunctionFromModule<pNtOpenProcess>(ntdll_, nt_functions_name::OPEN_PROCESS);
+	}
+
+	void NtDll::LoadNtReadProcessMemory()
+	{
+		if (NtReadProcessMemory_) {
+			return;
+		}
+		NtReadProcessMemory_ = LoadFunctionFromModule<pNtReadProcessMemory>(ntdll_, nt_functions_name::READ_MEMORY);
+	}
+
+	void NtDll::LoadNtQueryVirtualMemory()
+	{
+		if (NtQueryVirtualMemory_) {
+			return;
+		}
+		NtQueryVirtualMemory_ = LoadFunctionFromModule<pNtQueryVirtualMemory>(ntdll_, nt_functions_name::QUERY_MEMORY);
+	}
+
+	NTSTATUS NtDll::NtQuerySystemInformation(SYSTEM_INFORMATION_CLASS SystemInformationClass, PVOID SystemInformation, ULONG SystemInformationLength, PULONG ReturnLength) {
+		LoadNtQuerySystemInformation();
+		return NtQuerySystemInformation_(SystemInformationClass, SystemInformation, SystemInformationLength, ReturnLength);
+	}
+
+	NTSTATUS NtDll::NtOpenProcess(PHANDLE hProcess, ACCESS_MASK desired_access, POBJECT_ATTRIBUTES object_attributes, CLIENT_ID* client_id) {
+		LoadNtOpenProcess();
+		return NtOpenProcess_(hProcess, desired_access, object_attributes, client_id);
+	}
+
+	NTSTATUS NtDll::NtReadProcessMemory(HANDLE ProcessHandle, PVOID BaseAddress, PVOID Buffer, SIZE_T NumberOfBytesToRead, PSIZE_T NumberOfBytesRead)
+	{
+		LoadNtReadProcessMemory();
+		return NtReadProcessMemory_(ProcessHandle, BaseAddress, Buffer, NumberOfBytesToRead, NumberOfBytesRead);
+	}
+
+	NTSTATUS NtDll::NtQueryVirtualMemory(HANDLE ProcessHandle, PVOID BaseAddress, MEMORY_INFORMATION_CLASS MemoryInformationClass
+		, PVOID MemoryInformation, SIZE_T MemoryInformationLength, PSIZE_T ReturnLength)
+	{
+		LoadNtQueryVirtualMemory();
+		return NtQueryVirtualMemory_(ProcessHandle, BaseAddress, MemoryInformationClass, MemoryInformation, MemoryInformationLength, ReturnLength);
+	}
+	NtDll& GetNtDll()
+	{
+		static NtDll instance;
+		return instance;
+	}
+}

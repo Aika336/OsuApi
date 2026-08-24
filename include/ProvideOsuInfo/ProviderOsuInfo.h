@@ -8,7 +8,7 @@
 #include <optional>
 
 class OsuInfoProvider {
-	uintptr_t base_address_;
+	uintptr_t base_address_; 
 	HandleRaii handle_;
 
 	std::optional<uintptr_t> GetCurrentScreenAddress();

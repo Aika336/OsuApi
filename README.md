@@ -1,50 +1,128 @@
-***SignatureFinder*** is a model that allows you to find the signature address and the address of the desired value using an offset within the required process.
+
+# OsuApi
+
+OsuApi is a library that reads live game state directly from osu!lazer process memory.
+
+Currently exposes: **current combo**, **active mods**, and **whether a map is being played**.
+
+> **Platform:** Windows  
+> **Game version:** osu! lazer
 
 ---
 
-### Technical implementation
+## How it works
 
-To find the signature, we use auxiliary tools provided by the SignatureFinder module.
+osu! lazer is a .NET application, so its internal objects live on the managed heap at addresses that change every time the game restarts. To find them reliably, the library uses a **signature scan**:
 
- -  **ProvideProcesses** 
-    - First, we search for all running processes using ProvideProcesses. Under the hood, the main function used is CreateToolhelp32Snapshot ([Click](https://learn.microsoft.com/en-us/windows/win32/api/tlhelp32/nf-tlhelp32-createtoolhelp32snapshot)). All processes are iterated through and saved into a list of **ProcessInfo** structures, which stores the name of the process and its pId.
-- **OpenProcess**
-    - OpenProcess gives us access to the stream using the OpenProcess function ([Click](https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-openprocess)). You have the option to choose with what rights access will be opened, the OpenProcess class provides three possible methods for this(OpenProcessById**W**, OpenProcessById**R**, OpenProcessById**RW**). The result of the methods' work will be the Handler_raii structure, which does not oblige you to close access to the process yourself, but takes on this responsibility itself.
-- **SignatureFinder**
-    - The main function of this module. For proper operation, all necessary parameters, such as **handle_number of process**, **signature**, **non-const byte**, and **offset**, are passed through the constructor when creating a class instance. ```SignatureFinder(Handler_raii handler, const std::vector<uint8_t>& signature_, uint8_t NONCONST_BYTE_, size_t value_offset_)```. Inside the class there is a function **CheckForStableSignature** that checks the memory segment for the presence of the passed signature; if such memory is found, it returns the offset to the desired section where the signature itself is located.
+1. A known byte pattern is searched across the game's committed memory pages.
+2. The match gives a stable anchor — the address of the `OsuGame` base object — with a fixed offset applied after the pattern.
+3. From there, everything else is reachable by following pointer chains using the offsets in `OsuOffset.h`.
 
-![Graph](repoFiles/SignatureFinder.svg)
+For reading .NET strings (like the mods JSON), there's a dedicated `DotNetString` reader that handles the CLR string layout (`length` at `+0x8`, UTF-16 data at `+0xC`).
 
-## !! will be change !! 
+```
+Signature scan → OsuGame base
+    └─ ScreenStack → current screen (Player)
+            ├─ ScoreProcessor → combo value
+            ├─ Score → ScoreInfo → mods JSON → parse acronyms
+            └─ API + ScoreManager pointers → compare with game-level → is_playing
+```
 
+### Why ntdll?
 
-#### provide simple code, how this can be work:
+All process interaction in this version goes through `ntdll.dll` (the Windows NT native API) rather than the standard WinApi layer in `kernel32.dll`.  
+Security software (antivirus, EDR) typically intercepts calls at the Win32 level using `ReadProcessMemory` and similar functions. By resolving core NT functions at runtime using `GetProcAddress` in ntdll.dll, these interceptions are bypassed. Functions are lazily loaded, so there is no overhead for functions that are not called.
+
+---
+
+## Project structure
+
+```
+OsuApi/
+├── NtDll/
+│   ├── include/
+│   │   ├── ntdll.h      # NtDll wrapper class + GetNtDll() singleton
+│   │   └── domain.h     # NT function pointer typedefs, LoadModule helper
+│   └── src/
+│       ├── ntdll.cpp
+│       └── domain.cpp
+├── include/
+│   ├── Logger/              # Macros for event logging
+│   ├── Memory/              # NtReadVirtualMemory + .NET string reader
+│   ├── MemoryScanning/      # Signature matcher
+│   ├── ProcessManager/      # Process discovery, handle management (RAII)
+│   └── ProvideOsuInfo/      # osu!-specific logic: offsets, state extraction
+│       └── OsuOffsets/      # Offsets for finding values
+├── src/
+├── main.cpp                 # Demo: prints combo and mods
+└── CMakeLists.txt
+```
+
+### Modules
+
+| Module | What it does |
+|---|---|
+| `NtDll` | Loads `ntdll.dll` via `GetModuleHandle` and resolves NT functions on demand. Provides a singleton `ntdll::GetNtDll()` used by every other module that touches process memory. |
+| `ProcessManager` | Enumerates running processes via `NtQuerySystemInformation(SystemProcessInformation)`, finds osu! by name, opens a handle via `NtOpenProcess`. `HandleRaii` ensures the handle is always closed. |
+| `MemoryScanning` | `PatternMatcher` holds a signature + mask and scans a byte buffer for a match. `ProcessMemoryScanner` walks all committed, accessible memory regions via `NtQueryVirtualMemory` and runs the matcher against each. |
+| `Memory` | Two thin wrappers around `NtReadVirtualMemory`: `ReadAs<T>` for fixed-size values, `ReadMemoryRegion` for raw byte chunks. Both return `std::optional` — no exceptions on read failure. |
+| `ProvideOsuInfo` | Knows the osu! object layout. `OsuInfoProvider` walks pointer chains to extract combo, mods, and playing state. `OsuHandler` is the public-facing class that owns the provider and exposes `UpdateGameState()` / `GetGameState()`. |
+| `Logger` | Minimal — `LOG(msg)` goes to stdout, `LOG_ERROR(msg)` to stderr. Both prepend `__FUNCSIG__` so you always know where the message came from. |
+
+---
+
+## Building
+
+Requirements:
+- Windows (MSVC)
+- CMake 3.11+
+- A C++20 compiler
+
+```bash
+git clone https://github.com/yourname/OsuApi
+cd OsuApi
+mkdir build
+cd build
+cmake ..
+cd ..
+cmake --build build --config Release
+```
+
+The demo executable ends up at `build/Release/OsuApi.exe`
+
+---
+
+## Usage
+
 ```cpp
-#include <iostream>
 #include <OsuHandler.h>
 
 int main() {
+    // Throws if osu! isn't running or the signature isn't found
+    OsuHandler handler;
 
-	OsuHandler handler;
-	GameState g_state = handler.GetGameState();
-	while (1) {
-		handler.UpdateGameState();
-		g_state = handler.GetGameState();
+    while (true) {
+        handler.UpdateGameState();
+        const GameState state = handler.GetGameState();
 
-		if (g_state.is_playing) {
-			std::cout << g_state.current_combo << std::endl;
-			for (auto mods : g_state.current_mods) {
-				std::cout << '[' << mods << ']';
-			}
-			std::cout << std::endl;
-		}
-		else {
-			std::cout << "Not playing" << std::endl;
-		}
-		Sleep(300);
-		system("cls");
-	}
+        if (state.is_playing) {
+            std::cout << "Combo: " << state.current_combo << "\n";
+            for (const auto& mod : state.current_mods)
+                std::cout << "[" << mod << "]";
+            std::cout << "\n";
+        } else {
+            std::cout << "Not in a map\n";
+        }
 
-    return 0;
+        Sleep(300);
+    }
 }
 ```
+
+`GameState` fields:
+
+| Field | Type | Description |
+|---|---|---|
+| `is_playing` | `bool` | `true` when the Player screen is active and its API/ScoreManager pointers match the game's |
+| `current_combo` | `int` | Current combo; `-1` if unreadable or not playing |
+| `current_mods` | `vector<string>` | Mod acronyms from the score's JSON field (e.g. `"HD"`, `"DT"`); empty list if no mods |

@@ -1,8 +1,6 @@
 #include "ProcessProvider.h"
 #include "Logger.h"
-
-#include <TlHelp32.h>
-#include <iostream>
+#include "ntdll.h"
 
 std::optional<ProcessInfo> ProcessProvider::FindProcessByName(const std::wstring& name)
 {
@@ -17,25 +15,56 @@ std::optional<ProcessInfo> ProcessProvider::FindProcessByName(const std::wstring
 		}
 	}
 
+	LOG_ERROR("ProvideProcesses::FindProcessByName: No find process by name " + std::string(name.begin(), name.end()));
 	throw std::runtime_error("ProvideProcesses::FindProcessByName: No find process by name " + std::string(name.begin(), name.end()));
 }
 
 std::vector<ProcessInfo> ProcessProvider::GetAllProcesses() {
 	std::vector<ProcessInfo> processes;
-	HANDLE snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
-	if (snapshot == INVALID_HANDLE_VALUE) {
-		throw std::runtime_error("ProvideProcesses::GetAllProcesses: Failed to create process snapshot.");
+	
+	ULONG systeminfo_len = 0;
+	NTSTATUS status = ntdll::GetNtDll().NtQuerySystemInformation(
+		SystemProcessInformation,
+		nullptr,
+		systeminfo_len,
+		&systeminfo_len
+	);
+
+	const NTSTATUS STATUS_INFO_LENGTH_MISMATCH = 0xC0000004;
+	if (status != STATUS_INFO_LENGTH_MISMATCH) {
+		LOG_ERROR("Can't get sysinfo's length");
+		throw std::runtime_error("Can't get sysinfo's length");
 	}
 
-	PROCESSENTRY32W pe = { sizeof(pe) };
-	if (Process32FirstW(snapshot, &pe)) {
-		do {
-			ProcessInfo p{ pe.th32ProcessID, std::wstring(pe.szExeFile) };
-			processes.emplace_back(p);
-		} while (Process32NextW(snapshot, &pe));
+	std::vector<BYTE> buffer(systeminfo_len);
+	status = ntdll::GetNtDll().NtQuerySystemInformation(
+		SystemProcessInformation,
+		buffer.data(),
+		systeminfo_len,
+		&systeminfo_len
+	);
+
+	if (!NT_SUCCESS(status)) {
+		LOG_ERROR("Can't get system information");
+		throw std::runtime_error("Can't get system information");
 	}
 
-	CloseHandle(snapshot);
+	PSYSTEM_PROCESS_INFORMATION sysinfo =
+		reinterpret_cast<PSYSTEM_PROCESS_INFORMATION>(buffer.data());
+
+	while (true) {
+		processes.emplace_back(
+			HandleToLong(sysinfo->UniqueProcessId), 
+			UnicodeStringToWString(sysinfo->ImageName));
+
+		if (sysinfo->NextEntryOffset == 0) {
+			break;
+		}
+		sysinfo = reinterpret_cast<PSYSTEM_PROCESS_INFORMATION>(
+			reinterpret_cast<BYTE*>(sysinfo) + sysinfo->NextEntryOffset
+			);
+	}
+
 	return processes;
 }
 

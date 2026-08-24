@@ -21,6 +21,7 @@ std::optional<uintptr_t> OsuInfoProvider::GetCurrentScreenAddress()
 
 
     if (count <= 0 || items == 0 || !screen_stack || !stack || !count || !items) {
+        LOG_ERROR("Can't get get a current screen address");
         return std::nullopt;
     }
 
@@ -31,7 +32,6 @@ std::optional<uintptr_t> OsuInfoProvider::GetScoreInfo()
 {
     auto screen = GetCurrentScreenAddress();
     if (!screen) {
-        std::cout << "GetPlayingState: can't get get current screen address" << std::endl;
         return std::nullopt;
     }
 
@@ -41,7 +41,7 @@ std::optional<uintptr_t> OsuInfoProvider::GetScoreInfo()
     }
 
     auto score_info = Memory::ReadAs<uintptr_t>(handle_, *player_score + 0x8);
-    if (!player_score) {
+    if (!score_info) {
         return std::nullopt;
     }
 
@@ -55,20 +55,25 @@ OsuInfoProvider::OsuInfoProvider(HandleRaii handle, const uintptr_t& base_addres
 std::vector<std::string> OsuInfoProvider::GetCurrentMods()
 {
 
-    std::vector<std::string> mods;
+    std::vector<std::string> mods{"NM"};
     auto score_info = GetScoreInfo();
-    if (!score_info || !GetPlayingState())
+    if (!score_info || !GetPlayingState()) {
         return mods;
+    }
 
     auto string_address = Memory::ReadAs<uintptr_t>(handle_, score_info.value() + OsuOffsets::ScoreInfo_ModsJson);
-    if (!string_address)
+    if (!string_address) {
         return mods;
+    }
 
     std::wstring mods_json = DotNetString::Read(handle_, *string_address).value_or(L"");
 
-    if (mods_json.empty()) return mods;
+    if (mods_json.empty()) {
+        return mods;
+    }
 
     const std::wstring keys[] = { L"\"acronym\":\"", L"\"Acronym\":\"" };
+    mods.pop_back();
 
     for (const std::wstring& key : keys) {
         size_t pos = 0;
@@ -93,11 +98,12 @@ std::vector<std::string> OsuInfoProvider::GetCurrentMods()
 
 int OsuInfoProvider::GetCurrentCombo()
 {
-    if (!GetPlayingState()) return 1;
+    if (!GetPlayingState()) {
+        return -1;
+    }
 
     auto screen = GetCurrentScreenAddress();
     if (!screen) {
-        std::cout << "GetPlayingState: can't get get current screen address" << std::endl;
         return -1;
     }
 
@@ -126,7 +132,6 @@ bool OsuInfoProvider::GetPlayingState()
 {
     auto screen = GetCurrentScreenAddress();
     if (!screen) {
-        std::cout << "GetPlayingState: can't get get current screen address" << std::endl;
         return false;
     }
 

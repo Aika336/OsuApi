@@ -8,28 +8,28 @@
 */
 
 namespace OsuOffsets {
-    inline constexpr uint32_t OsuGame_osuLogo = 1592;
-    inline constexpr uint32_t OsuGame_ScreenStack = 1552;
-    inline constexpr uint32_t OsuGame_frameworkConfig = 1488;
-    inline constexpr uint32_t OsuGame_channelManager = 1320;
-    inline constexpr uint32_t OsuGame_chatOverlay = 1312;
+    inline constexpr uint32_t OsuGame_osuLogo = 1608;
+    inline constexpr uint32_t OsuGame_ScreenStack = 1568;
+    inline constexpr uint32_t OsuGame_frameworkConfig = 1504;
+    inline constexpr uint32_t OsuGame_channelManager = 1328;
+    inline constexpr uint32_t OsuGame_chatOverlay = 1320;
 
     inline constexpr uint32_t Game_Host = 824;
 
     inline constexpr uint32_t OsuGameBase_API = 1080;
-    inline constexpr uint32_t OsuGameBase_SpectatorClient = 1192;
+    inline constexpr uint32_t OsuGameBase_SpectatorClient = 1200;
     inline constexpr uint32_t OsuGameBase_ScoreManager = 1024;
-    inline constexpr uint32_t OsuGameBase_MultiplayerClient = 1200;
-    inline constexpr uint32_t OsuGameBase_LeaderboardManager = 1168;
+    inline constexpr uint32_t OsuGameBase_MultiplayerClient = 1208;
+    inline constexpr uint32_t OsuGameBase_LeaderboardManager = 1176;
     inline constexpr uint32_t OsuGameBase_SessionStatics = 992;
-    inline constexpr uint32_t OsuGameBase_beatmapClock = 1232;
+    inline constexpr uint32_t OsuGameBase_beatmapClock = 1240;
     inline constexpr uint32_t OsuGameBase_Storage = 1088;
     inline constexpr uint32_t OsuGameBase_Beatmap = 1104;
     inline constexpr uint32_t OsuGameBase_SkinManager = 1040;
     inline constexpr uint32_t OsuGameBase_VersionHash = 976;
     inline constexpr uint32_t OsuGameBase_LocalConfig = 984;
-    inline constexpr uint32_t OsuGameBase_rulesetConfigCache = 1176;
-    inline constexpr uint32_t OsuGameBase_realm = 1216;
+    inline constexpr uint32_t OsuGameBase_rulesetConfigCache = 1184;
+    inline constexpr uint32_t OsuGameBase_realm = 1224;
 
     inline constexpr uint32_t ScreenStack_stack = 800;
 
